@@ -30,7 +30,9 @@
   height: 30%;
   color: black;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: space-between;
+
 }
 
 .contenitore-pulsanti {
@@ -39,8 +41,18 @@
   height: 70%;
 }
 
+.valore-corrente {
+  display: flex;
+  flex-direction: row;
+}
+
 
 
 .puls-categorie {}
 
 .puls-prodotti {}
+
+.valore-totale {
+  display: flex;
+  justify-content: end;
+}

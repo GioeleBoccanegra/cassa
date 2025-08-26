@@ -1,7 +1,9 @@
 
 import './App.css'
+import Pulsante from "./components/pulsante/Pulsante"
 
 function App() {
+
 
 
   return (
@@ -20,6 +22,9 @@ function App() {
           </div>
           <div className='contenitore-pulsanti '>
 
+            {Array.from({ length: 10 }, (_, i) => (
+              <Pulsante key={i} val={i} />
+            ))}
           </div>
         </div>
       </div>

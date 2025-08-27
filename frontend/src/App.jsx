@@ -5,70 +5,76 @@ import Pulsante from "./components/zona-destra/pulsante/Pulsante"
 
 function App() {
 
-  const [importo, setImporto] = useState(0);
-  const [importoCent, setImportoCent] = useState(0)
-  const [decim, setDecim] = useState(false)
+  const [importo, setImporto] = useState("");
   const [simbolo, setSimbolo] = useState(null)
   const [totale, setTotale] = useState(0)
+  const [fattoTotale, setFattoTotale] = useState(false)
 
   const simboli = ["+", "-", "*", "/"];
 
   const conferma = () => {
-    setImporto("0")
-    setDecim(false)
-    setImportoCent("0")
+    setImporto("")
+    setTotale(0)
+    setSimbolo(null)
+    setFattoTotale(false)
 
   }
 
-  const faiCent = (imp) => {
-    return Number(imp.toString().slice(0, 2));
-  }
+  const parseImporto = (imp) => {
+    return parseFloat(
+      (imp || "0").replace(",", ".")
+    );
+  };
+
+  const arr = (tot) => Number.isFinite(tot) ? tot.toFixed(2) : 0;
+
 
   const faiTotale = () => {
     setTotale(prev => {
       switch (simbolo) {
         case "+":
-          return prev + importo + faiCent(importoCent);
+          return prev + parseImporto(importo);
         case "-":
-          return prev - importo + faiCent(importoCent);
+          return prev - parseImporto(importo);
         case "*":
-          return prev * importo + faiCent(importoCent);
-        case ":":
-          return prev / importo + faiCent(importoCent);
+          return prev * parseImporto(importo);
+
+        case "/":
+          return prev / parseImporto(importo);
         default:
-          return importo + faiCent(importoCent);
+          return parseImporto(importo);
       }
     })
-    setImporto(0)
-    setImportoCent(0)
+    setImporto("")
     setSimbolo(null)
-    setDecim(false)
+    setFattoTotale(true)
   }
 
   const aggTotale = (s) => {
+
     setTotale(prev => {
       switch (simbolo) {
         case "+":
-          return prev + importo + faiCent(importoCent);
+          return prev + parseImporto(importo);
         case "-":
-          return prev - importo + faiCent(importoCent);
+          return prev - parseImporto(importo);
         case "*":
-          return prev * importo + faiCent(importoCent);
-        case ":":
-          return prev / importo + faiCent(importoCent);
+          return prev * parseImporto(importo);
+        case "/":
+          return prev / parseImporto(importo);
         default:
           if (prev == 0) {
-            return importo + faiCent(importoCent);
-          } else {
+            return parseImporto(importo);
+          }
+          else {
             return prev;
           }
 
       }
     })
-    setImporto(0)
-    setImportoCent(0)
     setSimbolo(s)
-    setDecim(false)
+    setImporto("")
+    setFattoTotale(false)
   }
 
 
@@ -86,26 +92,25 @@ function App() {
         <div className='zona-destra'>
           <div className='monitor-cassa'>
             <div className='valore-corrente'>
-              <p>€{importo}</p>{importoCent > 0 && (
-                <p>, {faiCent(importoCent)}</p>
-              )}
+              {simbolo && <p>{simbolo}</p>}
+              <p>€{importo}</p>
             </div>
             <div className='valore-totale'>
-              <p>tot:{totale}</p>
+              <p>tot:{arr(totale)}</p>
             </div>
 
           </div>
           <div className='contenitore-pulsanti'>
 
             {Array.from({ length: 10 }, (_, i) => (
-              <Pulsante key={i} val={i} setImporto={setImporto} decim={decim} setImportoCent={setImportoCent} />
+              <Pulsante key={i} val={i} setImporto={setImporto} fattoTotale={fattoTotale} setFattoTotale={setFattoTotale} setTotale={setTotale} />
             ))}
 
             {simboli.map((s) => (
               <button key={s} onClick={() => { aggTotale(s) }}>{s}</button>
             ))}
 
-            <button onClick={() => { setDecim(true) }}>,</button>
+            <button onClick={() => { setImporto(prev => prev.includes(",") ? prev : prev + ","); }}>,</button>
 
             <button onClick={() => { faiTotale() }}>=</button>
 

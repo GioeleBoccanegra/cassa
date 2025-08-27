@@ -77,6 +77,14 @@ function App() {
     setFattoTotale(false)
   }
 
+  const elimina = () => {
+    if (importo.length > 0) {
+      setImporto(prev => prev.slice(0, -1));
+    } else {
+      setSimbolo(null)
+    }
+  }
+
 
   return (
     <>
@@ -115,6 +123,7 @@ function App() {
             <button onClick={() => { faiTotale() }}>=</button>
 
             <button onClick={conferma}>conferma</button>
+            <button onClick={() => { elimina() }}>elimina</button>
 
 
 

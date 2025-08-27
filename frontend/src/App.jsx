@@ -28,8 +28,7 @@ function App() {
 
   const arr = (tot) => Number.isFinite(tot) ? tot.toFixed(2) : 0;
 
-
-  const faiTotale = () => {
+  const calcola = (simbolo) => {
     setTotale(prev => {
       switch (simbolo) {
         case "+":
@@ -45,33 +44,23 @@ function App() {
           return parseImporto(importo);
       }
     })
+  }
+
+
+  const faiTotale = () => {
+    calcola(simbolo)
     setImporto("")
     setSimbolo(null)
     setFattoTotale(true)
   }
 
+
+
   const aggTotale = (s) => {
 
-    setTotale(prev => {
-      switch (simbolo) {
-        case "+":
-          return prev + parseImporto(importo);
-        case "-":
-          return prev - parseImporto(importo);
-        case "*":
-          return prev * parseImporto(importo);
-        case "/":
-          return prev / parseImporto(importo);
-        default:
-          if (prev == 0) {
-            return parseImporto(importo);
-          }
-          else {
-            return prev;
-          }
+    if (importo) calcola(simbolo)
 
-      }
-    })
+
     setSimbolo(s)
     setImporto("")
     setFattoTotale(false)
@@ -91,8 +80,12 @@ function App() {
       <div className='visual-cassa'>
 
         <div className='zona-sinistra'>
-          <div className='puls-categorie'></div>
-          <div className='puls-prodotti'></div>
+          <div className='puls-categorie'>
+
+          </div>
+          <div className='puls-prodotti'>
+
+          </div>
         </div>
 
 

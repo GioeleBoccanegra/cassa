@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -33,6 +34,26 @@ class CategoryController extends Controller
             $categories = Category::all();
 
             return response()->json($categories);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
+    public function seeProductInCategory($categoryid)
+    {
+
+        try {
+
+            $category = Category::findOrFail($categoryid);
+            if (!$category) {
+                return response()->json(['error' => 'Categoria non trovata'], 404);
+            }
+
+
+            $products = $category->products;
+
+            return response()->json($products);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

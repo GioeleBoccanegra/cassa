@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categoria;
+use App\Models\Category;
 use Exception;
 use Illuminate\Http\Request;
 
-class CategoriaController extends Controller
+class CategoryController extends Controller
 {
     public function store(Request $request)
     {
@@ -16,7 +16,7 @@ class CategoriaController extends Controller
         ]);
 
         try {
-            $categoria = Categoria::create([
+            $category = Category::create([
                 "nome" => $request->nome,
                 "iva" => $request->iva
             ]);
@@ -24,15 +24,15 @@ class CategoriaController extends Controller
             return response()->json(["errore nella crezione della categoria" => $e->getMessage()], 500);
         }
 
-        return response()->json($categoria, 201);
+        return response()->json($category, 201);
     }
 
     public function seeCategorie()
     {
         try {
-            $categorie = Categoria::all();
+            $categories = Category::all();
 
-            return response()->json($categorie);
+            return response()->json($categories);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

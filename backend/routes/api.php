@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\CategoriaController;
-
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/categorie', [CategoriaController::class, 'store']);
-Route::get('/categorie', [CategoriaController::class, 'seeCategorie']);
+Route::post('/categorie', [CategoryController::class, 'store']);
+Route::get('/categorie', [CategoryController::class, 'seeCategorie']);
+Route::post('/prodotti', [ProductController::class, 'store']);

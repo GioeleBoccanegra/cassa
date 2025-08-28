@@ -18,8 +18,10 @@ class Prodotto extends Model
         "val_iva"
     ];
 
-    public function category()
+    public function categoria()
     {
         return $this->belongsTo(Categoria::class);
     }
+
+    protected $table = 'prodotti';
 }

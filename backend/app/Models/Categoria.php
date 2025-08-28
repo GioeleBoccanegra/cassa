@@ -19,4 +19,6 @@ class Categoria extends Model
     {
         return $this->hasMany(Prodotto::class);
     }
+
+    protected $table = 'categorie';
 }

@@ -48,7 +48,14 @@
 
 
 
-.puls-categorie {}
+.puls-categorie {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: 10px;
+  border: solid, 1px, green;
+  padding: 10px;
+}
 
 .puls-prodotti {}
 

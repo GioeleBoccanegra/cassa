@@ -1,7 +1,8 @@
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import Pulsante from "./components/zona-destra/pulsante/Pulsante"
+import { getCategorie } from './api/getCategorie';
 
 function App() {
 
@@ -9,8 +10,20 @@ function App() {
   const [simbolo, setSimbolo] = useState(null)
   const [totale, setTotale] = useState(0)
   const [fattoTotale, setFattoTotale] = useState(false)
+  const [listaCategorie, setListacategorie] = useState([]);
 
   const simboli = ["+", "-", "*", "/"];
+
+
+
+  useEffect(() => {
+    const listaCategorie = async () => {
+      const risposta = await getCategorie();
+      setListacategorie(risposta)
+      console.log(risposta);
+    }
+    listaCategorie();
+  }, [])
 
   const conferma = () => {
     setImporto("")
@@ -81,7 +94,11 @@ function App() {
 
         <div className='zona-sinistra'>
           <div className='puls-categorie'>
-
+            {listaCategorie && (
+              listaCategorie.map((cat) => (
+                <p key={cat.nome}>{cat.nome}</p>
+              ))
+            )}
           </div>
           <div className='puls-prodotti'>
 

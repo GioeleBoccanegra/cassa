@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
+use Exception;
 use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
@@ -24,5 +25,16 @@ class CategoriaController extends Controller
         }
 
         return response()->json($categoria, 201);
+    }
+
+    public function seeCategorie()
+    {
+        try {
+            $categorie = Categoria::all();
+
+            return response()->json($categorie);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

@@ -1,16 +1,16 @@
 import "./Pulsante.css";
 
-export default function Pulsante({ val, setImporto, fattoTotale, setFattoTotale, setTotale, setUsaQt, usaQt, setQtProdotto }) {
+export default function Pulsante({ val, setImporto, fattoTotale, setFattoTotale, setUsaQt, usaQt, idProdottoAttuale, setListaAcquisti }) {
 
   const handelclik = () => {
     if (usaQt) {
-      setQtProdotto(val)
+      setListaAcquisti(prev => prev.map(acquisto => acquisto.id === idProdottoAttuale
+        ? { ...acquisto, qt: val } : acquisto))
       setUsaQt(false)
     } else {
 
 
       if (fattoTotale) {
-        setTotale(0)
         setFattoTotale(false)
       }
 

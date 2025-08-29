@@ -6,6 +6,7 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   border: solid 1px black;
   margin: 1px;
+  cursor: pointer;
 }
 
 .nome-prodotto-acq {
@@ -38,4 +39,11 @@
   color: #dc3545;
   /* rosso per totale */
   margin: 0 6px;
+}
+
+.valore-corrente-acq.evidenziato {
+  background-color: #ffc107;
+  /* colore evidenziato */
+  font-weight: bold;
+  color: #000;
 }

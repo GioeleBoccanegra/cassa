@@ -1,22 +1,16 @@
 
 import "./PulsateProdotto.css"
-export default function PulsanteProdotto({ prodotto, setImporto, setNomeProdotto, setTotale, setQtProdotto, importo, qtProdotto, setListaAcquisti, nomeProdotto }) {
+export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProdottoAttuale }) {
 
   const prodottoCliccato = (prodotto) => {
-    setTotale(prev => prev + (importo * qtProdotto))
-    if (nomeProdotto) {
-      setListaAcquisti(prev => [...prev, {
-        id: Date.now(),  // unico perché basato su millisecondi
-        nome: nomeProdotto,
-        qt: qtProdotto,
-        ivato: importo
-      }])
-    }
-    setQtProdotto(1)
-    setImporto(prodotto.ivato)
-    setNomeProdotto(prodotto.nome)
-    console.log("meso totale a " + prodotto.ivato)
-
+    const id = Date.now()
+    setListaAcquisti(prev => [...prev, {
+      id: id,  // unico perché basato su millisecondi
+      nome: prodotto.nome,
+      qt: 1,
+      ivato: prodotto.ivato
+    }])
+    setIdProdottoAttuale(id)
   }
 
   return (

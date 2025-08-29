@@ -11,15 +11,13 @@ import VoceAcquisto from './components/zona-destra/voceAcquisto/VoceAcquisto';
 function App() {
 
   const [importo, setImporto] = useState("");
-  const [totale, setTotale] = useState(0)
   const [fattoTotale, setFattoTotale] = useState(false)
   const [listaCategorie, setListacategorie] = useState([]);
   const [listaProdotti, setListaProdotti] = useState([]);
   const [idCategoria, setIdCategoria] = useState(null)
-  const [nomeProdotto, setNomeProdotto] = useState("")
-  const [qtProdotto, setQtProdotto] = useState(1)
   const [usaQt, setUsaQt] = useState(false)
   const [listaAcquisti, setListaAcquisti] = useState([])
+  const [idProdottoAttuale, setIdProdottoAttuale] = useState();
 
 
 
@@ -42,10 +40,7 @@ function App() {
 
   const conferma = () => {
     setImporto("")
-    setTotale(0)
     setFattoTotale(false)
-    setNomeProdotto("")
-    setQtProdotto(1)
 
   }
 
@@ -61,8 +56,6 @@ function App() {
 
 
   const faiTotale = () => {
-    setTotale(prev => prev + (qtProdotto * importo))
-    console.log(totale)
     setImporto("")
     setFattoTotale(true)
     console.log(listaAcquisti)
@@ -95,7 +88,7 @@ function App() {
             {idCategoria && listaProdotti && (
               listaProdotti.filter((prodotto) => prodotto.category_id === idCategoria)
                 .map((prodotto) => (
-                  <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setImporto={setImporto} setNomeProdotto={setNomeProdotto} setTotale={setTotale} setQtProdotto={setQtProdotto} importo={importo} qtProdotto={qtProdotto} setListaAcquisti={setListaAcquisti} nomeProdotto={nomeProdotto} />
+                  <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setListaAcquisti={setListaAcquisti} setIdProdottoAttuale={setIdProdottoAttuale} />
                 ))
 
             )}
@@ -106,27 +99,23 @@ function App() {
 
         <div className='zona-destra'>
           <div className='monitor-cassa'>
-            <div className='valore-corrente'>
-              {nomeProdotto && <p className='nome-prodotto'>{nomeProdotto}  </p>}
-              {qtProdotto && nomeProdotto && (<p className='monitor-quantità-prodotto'>X{qtProdotto}</p>)}
-
-              {importo && <p className='monitor-prezzo-prodotto'>  €{importo}</p>}
-              <p className='monitor-totale-prodotto'> €{qtProdotto * importo}</p>
-            </div>
             <div className='lista-acquisti-container'>
               {listaAcquisti && listaAcquisti.map((acquisto) => (
-                <VoceAcquisto key={acquisto.id} acquisto={acquisto} />
+                <VoceAcquisto key={acquisto.id} acquisto={acquisto} setIdProdottoAttuale={setIdProdottoAttuale} idProdottoAttuale={idProdottoAttuale} />
               ))}
             </div>
             <div className='monitor-valore-totale'>
-              <p>tot:{arr(totale + (qtProdotto * importo))}</p>
+
+              <p>tot:{arr(listaAcquisti.reduce((acc, acquisto) => {
+                return acc + acquisto.ivato * acquisto.qt
+              }, 0))}</p>
             </div>
 
           </div>
           <div className='contenitore-pulsanti'>
 
             {Array.from({ length: 10 }, (_, i) => (
-              <Pulsante key={i} val={i} setImporto={setImporto} fattoTotale={fattoTotale} setFattoTotale={setFattoTotale} setTotale={setTotale} setUsaQt={setUsaQt} usaQt={usaQt} setQtProdotto={setQtProdotto} />
+              <Pulsante key={i} val={i} setImporto={setImporto} fattoTotale={fattoTotale} setFattoTotale={setFattoTotale} setUsaQt={setUsaQt} usaQt={usaQt} idProdottoAttuale={idProdottoAttuale} setListaAcquisti={setListaAcquisti} />
             ))}
 
 

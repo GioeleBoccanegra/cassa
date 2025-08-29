@@ -8,12 +8,12 @@ export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProd
     setListaAcquisti(prev => {
       // controlla se esiste già il prodotto
       const esiste = prev.some(
-        acquisto => acquisto.id === prodotto.id && acquisto.ivato === prodotto.ivato
+        acquisto => acquisto.id === prodotto.id
       );
 
       if (esiste) {
         return prev.map(acquisto =>
-          acquisto.id === prodotto.id && acquisto.ivato === prodotto.ivato
+          acquisto.id === prodotto.id
             ? { ...acquisto, qt: acquisto.qt + 1 }
             : acquisto
         );
@@ -22,7 +22,7 @@ export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProd
           id: prodotto.id,
           nome: prodotto.nome,
           qt: 1,
-          ivato: prodotto.ivato
+          ivato: String(prodotto.ivato)
         }]
       }
     })

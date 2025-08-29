@@ -101,13 +101,13 @@ function App() {
           <div className='monitor-cassa'>
             <div className='lista-acquisti-container'>
               {listaAcquisti && listaAcquisti.map((acquisto) => (
-                <VoceAcquisto key={acquisto.id} acquisto={acquisto} setIdProdottoAttuale={setIdProdottoAttuale} idProdottoAttuale={idProdottoAttuale} />
+                <VoceAcquisto key={acquisto.id} acquisto={acquisto} setIdProdottoAttuale={setIdProdottoAttuale} idProdottoAttuale={idProdottoAttuale} parseImporto={parseImporto} />
               ))}
             </div>
             <div className='monitor-valore-totale'>
 
               <p>tot:{arr(listaAcquisti.reduce((acc, acquisto) => {
-                return acc + acquisto.ivato * acquisto.qt
+                return acc + parseImporto(acquisto.ivato) * acquisto.qt
               }, 0))}</p>
             </div>
 
@@ -115,7 +115,7 @@ function App() {
           <div className='contenitore-pulsanti'>
 
             {Array.from({ length: 10 }, (_, i) => (
-              <Pulsante key={i} val={i} setImporto={setImporto} fattoTotale={fattoTotale} setFattoTotale={setFattoTotale} setUsaQt={setUsaQt} usaQt={usaQt} idProdottoAttuale={idProdottoAttuale} setListaAcquisti={setListaAcquisti} />
+              <Pulsante key={i} val={i} setImporto={setImporto} fattoTotale={fattoTotale} setFattoTotale={setFattoTotale} setUsaQt={setUsaQt} usaQt={usaQt} idProdottoAttuale={idProdottoAttuale} setListaAcquisti={setListaAcquisti} importo={importo} />
             ))}
 
 

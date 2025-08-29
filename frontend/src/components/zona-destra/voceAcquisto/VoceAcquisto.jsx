@@ -1,10 +1,9 @@
 
 import "./VoceAcquisto.css"
-export default function VoceAcquisto({ acquisto, setIdProdottoAttuale, idProdottoAttuale }) {
+export default function VoceAcquisto({ acquisto, setIdProdottoAttuale, idProdottoAttuale, parseImporto }) {
 
   const seleziona = (idAcquisto) => {
     setIdProdottoAttuale(idAcquisto)
-
   }
 
   return (
@@ -14,7 +13,7 @@ export default function VoceAcquisto({ acquisto, setIdProdottoAttuale, idProdott
           <p className='nome-prodotto-acq'>{acquisto.nome}  </p>
           <p className='monitor-quantità-prodotto-acq'>X{acquisto.qt}</p>
           <p className='monitor-prezzo-prodotto-acq'>  €{acquisto.ivato}</p>
-          <p className='monitor-totale-prodotto-acq'> €{acquisto.qt * acquisto.ivato}</p>
+          <p className='monitor-totale-prodotto-acq'> €{acquisto.qt * parseImporto(acquisto.ivato)}</p>
         </div>
       )}
 

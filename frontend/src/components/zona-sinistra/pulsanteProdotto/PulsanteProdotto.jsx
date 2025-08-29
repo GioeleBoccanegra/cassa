@@ -3,14 +3,34 @@ import "./PulsateProdotto.css"
 export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProdottoAttuale }) {
 
   const prodottoCliccato = (prodotto) => {
-    const id = Date.now()
-    setListaAcquisti(prev => [...prev, {
-      id: id,  // unico perché basato su millisecondi
-      nome: prodotto.nome,
-      qt: 1,
-      ivato: prodotto.ivato
-    }])
-    setIdProdottoAttuale(id)
+
+
+    setListaAcquisti(prev => {
+      // controlla se esiste già il prodotto
+      const esiste = prev.some(
+        acquisto => acquisto.id === prodotto.id && acquisto.ivato === prodotto.ivato
+      );
+
+      if (esiste) {
+        return prev.map(acquisto =>
+          acquisto.id === prodotto.id && acquisto.ivato === prodotto.ivato
+            ? { ...acquisto, qt: acquisto.qt + 1 }
+            : acquisto
+        );
+      } else {
+        return [...prev, {
+          id: prodotto.id,
+          nome: prodotto.nome,
+          qt: 1,
+          ivato: prodotto.ivato
+        }]
+      }
+    })
+
+
+
+
+    setIdProdottoAttuale(prodotto.id)
   }
 
   return (

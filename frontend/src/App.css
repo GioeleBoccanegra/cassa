@@ -27,7 +27,7 @@
 .monitor-cassa {
   background-color: yellow;
   width: 100%;
-  height: 30%;
+  height: 70%;
   color: black;
   display: flex;
   flex-direction: column;
@@ -38,7 +38,7 @@
 .contenitore-pulsanti {
   background-color: rgb(39, 39, 5);
   width: 100%;
-  height: 70%;
+  height: 30%;
 }
 
 .valore-corrente {
@@ -56,13 +56,6 @@
   margin: 0;
 }
 
-.monitor-simbolo {
-  font-size: 18px;
-  font-weight: bold;
-  color: #ffc107;
-  /* giallo */
-  margin: 0 6px;
-}
 
 .monitor-quantità-prodotto {
   font-size: 15px;
@@ -115,9 +108,14 @@
   padding: 10px;
 }
 
-.puls-prodotti {}
-
 .valore-totale {
   display: flex;
   justify-content: end;
+}
+
+.lista-acquisti-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: auto;
 }

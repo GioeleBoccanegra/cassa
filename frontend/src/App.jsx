@@ -6,6 +6,8 @@ import { getCategorie } from './api/getCategorie';
 import { getProdotti } from './api/getProdotti'
 import PulsanteProdotto from './components/zona-sinistra/pulsanteProdotto/PulsanteProdotto';
 
+import VoceAcquisto from './components/zona-destra/voceAcquisto/VoceAcquisto';
+
 function App() {
 
   const [importo, setImporto] = useState("");
@@ -17,6 +19,7 @@ function App() {
   const [nomeProdotto, setNomeProdotto] = useState("")
   const [qtProdotto, setQtProdotto] = useState(1)
   const [usaQt, setUsaQt] = useState(false)
+  const [listaAcquisti, setListaAcquisti] = useState([])
 
 
 
@@ -62,6 +65,7 @@ function App() {
     console.log(totale)
     setImporto("")
     setFattoTotale(true)
+    console.log(listaAcquisti)
   }
 
 
@@ -91,7 +95,7 @@ function App() {
             {idCategoria && listaProdotti && (
               listaProdotti.filter((prodotto) => prodotto.category_id === idCategoria)
                 .map((prodotto) => (
-                  <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setImporto={setImporto} setNomeProdotto={setNomeProdotto} setTotale={setTotale} setQtProdotto={setQtProdotto} importo={importo} qtProdotto={qtProdotto} />
+                  <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setImporto={setImporto} setNomeProdotto={setNomeProdotto} setTotale={setTotale} setQtProdotto={setQtProdotto} importo={importo} qtProdotto={qtProdotto} setListaAcquisti={setListaAcquisti} nomeProdotto={nomeProdotto} />
                 ))
 
             )}
@@ -108,6 +112,11 @@ function App() {
 
               {importo && <p className='monitor-prezzo-prodotto'>  €{importo}</p>}
               <p className='monitor-totale-prodotto'> €{qtProdotto * importo}</p>
+            </div>
+            <div className='lista-acquisti-container'>
+              {listaAcquisti && listaAcquisti.map((acquisto) => (
+                <VoceAcquisto key={acquisto.id} acquisto={acquisto} />
+              ))}
             </div>
             <div className='monitor-valore-totale'>
               <p>tot:{arr(totale + (qtProdotto * importo))}</p>

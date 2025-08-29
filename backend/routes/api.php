@@ -8,3 +8,4 @@ Route::post('/categorie', [CategoryController::class, 'store']);
 Route::get('/categorie', [CategoryController::class, 'seeCategorie']);
 Route::post('/prodotti', [ProductController::class, 'store']);
 Route::get('/categorie/{id}', [CategoryController::class, 'seeProductInCategory']);
+Route::get('/prodotti', [ProductController::class, 'getProducts']);

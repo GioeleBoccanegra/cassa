@@ -6,6 +6,7 @@ use App\Models\Categoria;
 use App\Models\Category;
 use App\Models\Prodotto;
 use App\Models\Product;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -49,5 +50,15 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return response()->json(['errore nella creazione del prodotto' => $e->getMessage()], 500);
         };
+    }
+
+    public function getProducts()
+    {
+        try {
+            $prodotti = Product::all();
+            return response()->json($prodotti);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

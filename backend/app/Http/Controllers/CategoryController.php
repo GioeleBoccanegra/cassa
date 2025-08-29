@@ -40,7 +40,9 @@ class CategoryController extends Controller
     }
 
 
-    public function seeProductInCategory($categoryid)
+
+
+    /*public function seeProductInCategory($categoryid)
     {
 
         try {
@@ -58,4 +60,5 @@ class CategoryController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+        */
 }

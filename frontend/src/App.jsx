@@ -4,6 +4,7 @@ import './App.css'
 import Pulsante from "./components/zona-destra/pulsante/Pulsante"
 import { getCategorie } from './api/getCategorie';
 import { getProdotti } from './api/getProdotti'
+import PulsanteProdotto from './components/zona-sinistra/pulsanteProdotto/PulsanteProdotto';
 
 function App() {
 
@@ -14,6 +15,8 @@ function App() {
   const [listaCategorie, setListacategorie] = useState([]);
   const [listaProdotti, setListaProdotti] = useState([]);
   const [idCategoria, setIdCategoria] = useState(null)
+  const [nomeProdotto, setNomeProdotto] = useState("")
+  const [qtProdotto, setQtProdotto] = useState(1)
 
   const simboli = ["+", "-", "*", "/"];
 
@@ -113,10 +116,7 @@ function App() {
             {idCategoria && listaProdotti && (
               listaProdotti.filter((prodotto) => prodotto.category_id === idCategoria)
                 .map((prodotto) => (
-                  <div key={prodotto.id} onClick={() => { setImporto(prodotto.ivato) }}>
-                    <p>{prodotto.nome}</p>
-                    <p>€{prodotto.ivato}</p>
-                  </div>
+                  <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setImporto={setImporto} setNomeProdotto={setNomeProdotto} />
                 ))
 
             )}
@@ -128,10 +128,14 @@ function App() {
         <div className='zona-destra'>
           <div className='monitor-cassa'>
             <div className='valore-corrente'>
-              {simbolo && <p>{simbolo}</p>}
-              <p>€{importo}</p>
+              {nomeProdotto && <p className='nome-prodotto'>{nomeProdotto}  </p>}
+              {simbolo && <p className='monitor-simbolo'>{simbolo}</p>}
+              {qtProdotto && nomeProdotto && (<p className='monitor-quantità-prodotto'>X{qtProdotto}</p>)}
+
+              {importo && <p className='monitor-prezzo-prodotto'>  €{importo}</p>}
+              <p className='monitor-totale-prodotto'> €{qtProdotto * importo}</p>
             </div>
-            <div className='valore-totale'>
+            <div className='monitor-valore-totale'>
               <p>tot:{arr(totale)}</p>
             </div>
 

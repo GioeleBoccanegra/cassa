@@ -1,0 +1,46 @@
+.pulsante-prodotto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 140px;
+  height: 90px;
+  margin: 10px;
+  padding: 12px;
+
+  background-color: #f8f9fa;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pulsante-prodotto:hover {
+  background-color: #e9ecef;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.pulsante-prodotto:active {
+  transform: translateY(0px) scale(0.97);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pulsante-nome-prodotto {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  text-align: center;
+}
+
+.pulsante-ivato-prodotto {
+  font-size: 14px;
+  font-weight: 500;
+  color: #28a745;
+  /* verde per indicare prezzo */
+  margin: 4px 0 0 0;
+}

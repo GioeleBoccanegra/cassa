@@ -9,7 +9,6 @@ import PulsanteProdotto from './components/zona-sinistra/pulsanteProdotto/Pulsan
 function App() {
 
   const [importo, setImporto] = useState("");
-  const [simbolo, setSimbolo] = useState(null)
   const [totale, setTotale] = useState(0)
   const [fattoTotale, setFattoTotale] = useState(false)
   const [listaCategorie, setListacategorie] = useState([]);
@@ -17,8 +16,7 @@ function App() {
   const [idCategoria, setIdCategoria] = useState(null)
   const [nomeProdotto, setNomeProdotto] = useState("")
   const [qtProdotto, setQtProdotto] = useState(1)
-
-  const simboli = ["+", "-", "*", "/"];
+  const [usaQt, setUsaQt] = useState(false)
 
 
 
@@ -26,22 +24,25 @@ function App() {
     const listaCategorie = async () => {
       const risposta = await getCategorie();
       setListacategorie(risposta)
-      riceviProdotti();
+
     }
+    const riceviProdotti = async () => {
+      const risposta = await getProdotti()
+      setListaProdotti(risposta);
+    }
+
+    riceviProdotti();
 
     listaCategorie();
   }, [])
 
-  const riceviProdotti = async () => {
-    const risposta = await getProdotti()
-    setListaProdotti(risposta);
-  }
 
   const conferma = () => {
     setImporto("")
     setTotale(0)
-    setSimbolo(null)
     setFattoTotale(false)
+    setNomeProdotto("")
+    setQtProdotto(1)
 
   }
 
@@ -53,49 +54,23 @@ function App() {
 
   const arr = (tot) => Number.isFinite(tot) ? tot.toFixed(2) : 0;
 
-  const calcola = (simbolo) => {
-    setTotale(prev => {
-      switch (simbolo) {
-        case "+":
-          return prev + parseImporto(importo);
-        case "-":
-          return prev - parseImporto(importo);
-        case "*":
-          return prev * parseImporto(importo);
 
-        case "/":
-          return prev / parseImporto(importo);
-        default:
-          return parseImporto(importo);
-      }
-    })
-  }
 
 
   const faiTotale = () => {
-    calcola(simbolo)
+    setTotale(prev => prev + (qtProdotto * importo))
+    console.log(totale)
     setImporto("")
-    setSimbolo(null)
     setFattoTotale(true)
   }
 
 
 
-  const aggTotale = (s) => {
 
-    if (importo) calcola(simbolo)
-
-
-    setSimbolo(s)
-    setImporto("")
-    setFattoTotale(false)
-  }
 
   const elimina = () => {
     if (importo.length > 0) {
       setImporto(prev => prev.slice(0, -1));
-    } else {
-      setSimbolo(null)
     }
   }
 
@@ -116,7 +91,7 @@ function App() {
             {idCategoria && listaProdotti && (
               listaProdotti.filter((prodotto) => prodotto.category_id === idCategoria)
                 .map((prodotto) => (
-                  <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setImporto={setImporto} setNomeProdotto={setNomeProdotto} />
+                  <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setImporto={setImporto} setNomeProdotto={setNomeProdotto} setTotale={setTotale} setQtProdotto={setQtProdotto} importo={importo} qtProdotto={qtProdotto} />
                 ))
 
             )}
@@ -129,32 +104,30 @@ function App() {
           <div className='monitor-cassa'>
             <div className='valore-corrente'>
               {nomeProdotto && <p className='nome-prodotto'>{nomeProdotto}  </p>}
-              {simbolo && <p className='monitor-simbolo'>{simbolo}</p>}
               {qtProdotto && nomeProdotto && (<p className='monitor-quantità-prodotto'>X{qtProdotto}</p>)}
 
               {importo && <p className='monitor-prezzo-prodotto'>  €{importo}</p>}
               <p className='monitor-totale-prodotto'> €{qtProdotto * importo}</p>
             </div>
             <div className='monitor-valore-totale'>
-              <p>tot:{arr(totale)}</p>
+              <p>tot:{arr(totale + (qtProdotto * importo))}</p>
             </div>
 
           </div>
           <div className='contenitore-pulsanti'>
 
             {Array.from({ length: 10 }, (_, i) => (
-              <Pulsante key={i} val={i} setImporto={setImporto} fattoTotale={fattoTotale} setFattoTotale={setFattoTotale} setTotale={setTotale} />
+              <Pulsante key={i} val={i} setImporto={setImporto} fattoTotale={fattoTotale} setFattoTotale={setFattoTotale} setTotale={setTotale} setUsaQt={setUsaQt} usaQt={usaQt} setQtProdotto={setQtProdotto} />
             ))}
 
-            {simboli.map((s) => (
-              <button key={s} onClick={() => { aggTotale(s) }}>{s}</button>
-            ))}
+
 
             <button onClick={() => { setImporto(prev => prev.includes(",") ? prev : prev + ","); }}>,</button>
+            <button onClick={() => { setUsaQt(true) }}>QT</button>
 
             <button onClick={() => { faiTotale() }}>=</button>
 
-            <button onClick={conferma}>conferma</button>
+            <button onClick={conferma}>Cassa</button>
             <button onClick={() => { elimina() }}>elimina</button>
 
 

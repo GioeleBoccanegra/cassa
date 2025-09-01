@@ -15,7 +15,6 @@ function App() {
   const [listaCategorie, setListacategorie] = useState([]);
   const [listaProdotti, setListaProdotti] = useState([]);
   const [idCategoria, setIdCategoria] = useState(null)
-  const [usaQt, setUsaQt] = useState(false)
   const [listaAcquisti, setListaAcquisti] = useState([])
   const [idProdottoAttuale, setIdProdottoAttuale] = useState();
 
@@ -36,6 +35,62 @@ function App() {
 
     listaCategorie();
   }, [])
+
+  const impostaQt = () => {
+    if (idProdottoAttuale !== "totale") {
+
+
+      if (Number(importo) > 0) {
+        setListaAcquisti(prev => prev.map(acquisto => acquisto.id === idProdottoAttuale
+          ? { ...acquisto, qt: importo } : acquisto))
+        setImporto("0")
+      }
+    } else {
+      console.log("sei su totale")
+    }
+
+  }
+
+  const impostaPrezzo = () => {
+    if (idProdottoAttuale !== "totale") {
+
+      if (Number(importo) > 0) {
+        setListaAcquisti(prev => prev.map(acquisto => acquisto.id === idProdottoAttuale
+          ? { ...acquisto, ivato: importo } : acquisto))
+        setImporto("0")
+      }
+    } else {
+      console.log("sei su totale")
+    }
+  }
+
+
+  const impostaSconto = () => {
+    if (Number(importo) > 0 || Number(importo) < 100) {
+      if (idProdottoAttuale !== "totale") {
+        setListaAcquisti(prev => {
+          return prev.map((prod) => {
+            if (prod.id == idProdottoAttuale) {
+              return {
+                ...prod, ivato: String(Number(prod.ivato) - (Number(prod.ivato) * Number(importo) / 100))
+              }
+
+            }
+          })
+        })
+
+      } else {
+        setListaAcquisti(prev => {
+          return prev.map((prod) => {
+            return {
+              ...prod, ivato: String(Number(prod.ivato) - (Number(prod.ivato) * Number(importo) / 100))
+            }
+          })
+        })
+
+      }
+    }
+  }
 
 
   const conferma = () => {
@@ -88,7 +143,7 @@ function App() {
             {idCategoria && listaProdotti && (
               listaProdotti.filter((prodotto) => prodotto.category_id === idCategoria)
                 .map((prodotto) => (
-                  <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setListaAcquisti={setListaAcquisti} setIdProdottoAttuale={setIdProdottoAttuale} />
+                  <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setListaAcquisti={setListaAcquisti} setIdProdottoAttuale={setIdProdottoAttuale} importo={importo} setImporto={setImporto} />
                 ))
 
             )}
@@ -99,13 +154,13 @@ function App() {
 
         <div className='zona-destra'>
           <div className='monitor-cassa'>
+            <div className='monito-visual-valore'>{importo}</div>
             <div className='lista-acquisti-container'>
               {listaAcquisti && listaAcquisti.map((acquisto) => (
                 <VoceAcquisto key={acquisto.id} acquisto={acquisto} setIdProdottoAttuale={setIdProdottoAttuale} idProdottoAttuale={idProdottoAttuale} parseImporto={parseImporto} />
               ))}
             </div>
-            <div className='monitor-valore-totale'>
-
+            <div className={`monitor-valore-totale ${idProdottoAttuale === "totale" ? "evidenziato" : ""}`} key={"totale"} onClick={() => { setIdProdottoAttuale("totale") }}>
               <p>tot:{arr(listaAcquisti.reduce((acc, acquisto) => {
                 return acc + parseImporto(acquisto.ivato) * acquisto.qt
               }, 0))}</p>
@@ -115,13 +170,15 @@ function App() {
           <div className='contenitore-pulsanti'>
 
             {Array.from({ length: 10 }, (_, i) => (
-              <Pulsante key={i} val={i} setImporto={setImporto} fattoTotale={fattoTotale} setFattoTotale={setFattoTotale} setUsaQt={setUsaQt} usaQt={usaQt} idProdottoAttuale={idProdottoAttuale} setListaAcquisti={setListaAcquisti} importo={importo} />
+              <Pulsante key={i} val={i} setImporto={setImporto} fattoTotale={fattoTotale} setFattoTotale={setFattoTotale} importo={importo} />
             ))}
 
 
 
             <button onClick={() => { setImporto(prev => prev.includes(",") ? prev : prev + ","); }}>,</button>
-            <button onClick={() => { setUsaQt(true) }}>QT</button>
+            <button onClick={() => { impostaQt() }}>QT</button>
+            <button onClick={() => { impostaPrezzo() }}>€</button>
+            <button onClick={() => { impostaSconto() }}>%</button>
 
             <button onClick={() => { faiTotale() }}>=</button>
 
@@ -133,7 +190,7 @@ function App() {
 
           </div>
         </div>
-      </div>
+      </div >
 
     </>
   )

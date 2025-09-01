@@ -1,6 +1,6 @@
 
 import "./PulsateProdotto.css"
-export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProdottoAttuale }) {
+export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProdottoAttuale, importo, setImporto }) {
 
   const prodottoCliccato = (prodotto) => {
 
@@ -12,18 +12,49 @@ export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProd
       );
 
       if (esiste) {
-        return prev.map(acquisto =>
-          acquisto.id === prodotto.id
-            ? { ...acquisto, qt: acquisto.qt + 1 }
-            : acquisto
-        );
+        if (importo > 1) {
+          return prev.map(acquisto => {
+            if (acquisto.id === prodotto.id) {
+              const aggiornato = {
+                ...acquisto, qt: acquisto.qt + Number(importo)
+              }
+              setImporto("0")
+              return aggiornato
+            }
+            return acquisto
+          })
+
+        } else {
+          return prev.map(acquisto =>
+            acquisto.id === prodotto.id
+              ? { ...acquisto, qt: acquisto.qt + 1 }
+              : acquisto
+          )
+        }
+
+
+
       } else {
-        return [...prev, {
-          id: prodotto.id,
-          nome: prodotto.nome,
-          qt: 1,
-          ivato: String(prodotto.ivato)
-        }]
+        if (importo > 1) {
+          const nuovoAcquisto = {
+            id: prodotto.id,
+            nome: prodotto.nome,
+            qt: Number(importo),
+            ivato: String(prodotto.ivato)
+          };
+          setImporto("0");
+          return [...prev, nuovoAcquisto];
+
+
+        } else {
+          return [...prev, {
+            id: prodotto.id,
+            nome: prodotto.nome,
+            qt: 1,
+            ivato: String(prodotto.ivato)
+          }]
+        }
+
       }
     })
 

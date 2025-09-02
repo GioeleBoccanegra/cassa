@@ -1,18 +1,21 @@
 import "./Pulsante.css";
 
-export default function Pulsante({ val, setImporto, fattoTotale, setFattoTotale, importo }) {
+export default function Pulsante({ val, setImporto, importo }) {
 
   const handelclik = () => {
 
 
 
-    if (fattoTotale) {
-      setFattoTotale(false)
+
+
+    const dec = importo.split(",")[1]
+    if (!dec || dec.length < 2) {
+      const nuovoImporto = importo + val;
+
+      setImporto(nuovoImporto)
     }
 
 
-    const nuovoImporto = importo + val;
-    setImporto(nuovoImporto)
 
   }
 

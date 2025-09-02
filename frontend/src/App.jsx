@@ -11,7 +11,6 @@ import VoceAcquisto from './components/zona-destra/voceAcquisto/VoceAcquisto';
 function App() {
 
   const [importo, setImporto] = useState("");
-  const [fattoTotale, setFattoTotale] = useState(false)
   const [listaCategorie, setListacategorie] = useState([]);
   const [listaProdotti, setListaProdotti] = useState([]);
   const [idCategoria, setIdCategoria] = useState(null)
@@ -24,17 +23,20 @@ function App() {
     const listaCategorie = async () => {
       const risposta = await getCategorie();
       setListacategorie(risposta)
+      if (idCategoria == null) {
+        setIdCategoria(risposta[0].id)
+      }
 
     }
     const riceviProdotti = async () => {
       const risposta = await getProdotti()
       setListaProdotti(risposta);
     }
-
+    listaCategorie();
     riceviProdotti();
 
-    listaCategorie();
-  }, [])
+
+  }, [idCategoria])
 
   const impostaQt = () => {
     if (idProdottoAttuale !== "totale") {
@@ -99,8 +101,16 @@ function App() {
 
 
   const conferma = () => {
-    setImporto("")
-    setFattoTotale(false)
+    if (listaAcquisti) {
+      alert("i rpdotti sono: " + listaAcquisti)
+      setImporto("0")
+      setIdProdottoAttuale(null)
+      setListaAcquisti([])
+
+    } else {
+      alert("nessun conto da evadere")
+    }
+
 
   }
 
@@ -115,11 +125,7 @@ function App() {
 
 
 
-  const faiTotale = () => {
-    setImporto("")
-    setFattoTotale(true)
-    console.log(listaAcquisti)
-  }
+
 
 
 
@@ -139,6 +145,7 @@ function App() {
                 // se quantità maggiore di 1, decrementa
                 return { ...acquisto, qt: acquisto.qt - 1 }
               } else {
+                setIdProdottoAttuale(null)
                 // altrimenti lo eliminiamo
                 return null
               }
@@ -146,15 +153,18 @@ function App() {
             //ritorno ogetto anche se null
             return acquisto;
 
+
           })
             //pulisco array da valori null
             .filter(acquisto => acquisto !== null)
           )
-          idProdottoAttuale(null)
+
         }
       }
     }
   }
+
+
 
 
   return (
@@ -199,7 +209,7 @@ function App() {
               <div className='puls-categorie'>
                 {listaCategorie && (
                   listaCategorie.map((cat) => (
-                    <button key={cat.nome} onClick={() => { setIdCategoria(cat.id) }}>{cat.nome}</button>
+                    <button className={idCategoria == cat.id ? "evidenziato" : ""} key={cat.nome} onClick={() => { setIdCategoria(cat.id) }}>{cat.nome}</button>
                   ))
                 )}
               </div>
@@ -213,27 +223,42 @@ function App() {
                 )}
               </div>
             </div>
-            <div className='contenitore-pulsanti'>
+            <div className='tutti-pulsanti-calc'>
+              <div className='contenitore-pulsanti'>
 
-              {Array.from({ length: 10 }, (_, i) => (
-                <Pulsante key={i} val={i} setImporto={setImporto} fattoTotale={fattoTotale} setFattoTotale={setFattoTotale} importo={importo} />
-              ))}
-
-
-
-              <button onClick={() => { setImporto(prev => prev.includes(",") ? prev : prev + ","); }}>,</button>
-              <button onClick={() => { impostaQt() }}>QT</button>
-              <button onClick={() => { impostaPrezzo() }}>€</button>
-              <button onClick={() => { impostaSconto() }}>%</button>
-
-              <button onClick={() => { faiTotale() }}>=</button>
-
-              <button onClick={conferma}>Cassa</button>
-              <button onClick={() => { elimina() }}>elimina</button>
+                {[7, 8, 9, 4, 5, 6, 1, 2, 3].map((val) => (
+                  <Pulsante
+                    key={val}
+                    val={val}
+                    setImporto={setImporto}
+                    importo={importo}
+                  />
+                ))}
 
 
 
 
+
+                <button onClick={() => { impostaQt() }}>QT</button>
+                <Pulsante key={0} val={0} setImporto={setImporto} importo={importo} />
+                <button onClick={() => { setImporto(prev => prev.includes(",") ? prev : prev + ","); }}>,</button>
+
+
+                <button onClick={() => { impostaPrezzo() }}>€</button>
+                <button onClick={() => { impostaSconto() }}>%</button>
+                <button onClick={() => { elimina() }}>elimina</button>
+
+
+
+
+
+
+
+
+              </div>
+              <div className='container-pulsante-cassa-tot'>
+                <button className='pulsante-cassa-tot' onClick={conferma}>Cassa</button>
+              </div>
             </div>
           </div>
         </div >

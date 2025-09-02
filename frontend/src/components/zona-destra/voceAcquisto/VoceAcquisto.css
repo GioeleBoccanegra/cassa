@@ -1,41 +1,69 @@
+/* Righe prodotti - moderno */
 .valore-corrente-acq {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-  /* nome più largo, gli altri uguali */
+  /* stesse proporzioni dell'intestazione */
   align-items: center;
-  padding: 4px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 12px;
+  /* padding uniforme per spaziatura moderna */
+  background-color: #ffffff;
+  /* colore neutro moderno */
+  border-radius: 6px;
+  /* bordi arrotondati */
+  border: 1px solid #e0e0e0;
+  /* bordo leggero */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  /* leggera ombra */
+  transition: background-color 0.2s, transform 0.2s;
+  cursor: pointer;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.valore-corrente-acq:hover {
+  background-color: #f0f8ff;
+  /* leggero effetto hover */
+  transform: translateY(-1px);
+}
+
+/* Evidenziato al click/attivo */
+.valore-corrente-acq.evidenziato {
+  background-color: #ffc107;
+  /* evidenziato giallo */
+  font-weight: bold;
+  color: #000;
+  border-color: #ffb300;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Testo colonne */
+.valore-corrente-acq p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+  text-align: center;
 }
 
 .nome-prodotto-acq {
-  font-size: 13px;
+  text-align: left;
+  /* nome sempre a sinistra */
   font-weight: 600;
-  color: #000000;
+  color: #111;
 }
 
-
 .monitor-quantità-prodotto-acq {
-  font-size: 15px;
+  color: #0288d1;
+  /* azzurro coerente con pulsanti */
   font-weight: 500;
-  color: #17a2b8;
 }
 
 .monitor-prezzo-prodotto-acq {
-  font-size: 15px;
+  color: #43a047;
+  /* verde moderno */
   font-weight: 500;
-  color: #28a745;
 }
 
 .monitor-totale-prodotto-acq {
-  font-size: 18px;
-  font-weight: bold;
-  color: #dc3545;
+  color: #d32f2f;
   /* rosso per totale */
-}
-
-.valore-corrente-acq.evidenziato {
-  background-color: #ffc107;
-  /* colore evidenziato */
   font-weight: bold;
-  color: #000;
 }

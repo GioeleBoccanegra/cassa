@@ -128,6 +128,31 @@ function App() {
   const elimina = () => {
     if (importo.length > 0) {
       setImporto(prev => prev.slice(0, -1));
+    } else {
+      if (listaAcquisti) {
+        if (idProdottoAttuale == "totale") {
+          setListaAcquisti([])
+        } else {
+          setListaAcquisti(prev => prev.map(acquisto => {
+            if (idProdottoAttuale == acquisto.id) {
+              if (acquisto.qt > 1) {
+                // se quantità maggiore di 1, decrementa
+                return { ...acquisto, qt: acquisto.qt - 1 }
+              } else {
+                // altrimenti lo eliminiamo
+                return null
+              }
+            }
+            //ritorno ogetto anche se null
+            return acquisto;
+
+          })
+            //pulisco array da valori null
+            .filter(acquisto => acquisto !== null)
+          )
+          idProdottoAttuale(null)
+        }
+      }
     }
   }
 
@@ -137,79 +162,82 @@ function App() {
       <div className='visual-cassa'>
 
         <div className='zona-sinistra'>
-          <div className='puls-categorie'>
-            {listaCategorie && (
-              listaCategorie.map((cat) => (
-                <button key={cat.nome} onClick={() => { setIdCategoria(cat.id) }}>{cat.nome}</button>
-              ))
-            )}
-          </div>
-          <div className='puls-prodotti'>
-            {idCategoria && listaProdotti && (
-              listaProdotti.filter((prodotto) => prodotto.category_id === idCategoria)
-                .map((prodotto) => (
-                  <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setListaAcquisti={setListaAcquisti} setIdProdottoAttuale={setIdProdottoAttuale} importo={importo} setImporto={setImporto} />
-                ))
+          <div className='lista-acquisti-container'>
+            <div className='indicazioni-lista-voci-monitor'>
+              <p>nome  </p>
+              <p>Quantità</p>
 
-            )}
+              <p>  prezzo</p>
+
+              <p > sconto </p>
+
+              <p >tot</p>
+            </div>
+            {listaAcquisti && listaAcquisti.map((acquisto) => (
+              <VoceAcquisto key={acquisto.id} acquisto={acquisto} setIdProdottoAttuale={setIdProdottoAttuale} idProdottoAttuale={idProdottoAttuale} parseImporto={parseImporto} arr={arr} />
+            ))}
           </div>
+          <div className={`monitor-valore-totale ${idProdottoAttuale === "totale" ? "evidenziato" : ""}`} key={"totale"} onClick={() => { setIdProdottoAttuale("totale") }}>
+            <p className='monitor-visual-valore'>VAL:{parseImporto(importo)}</p>
+            <p>TOT:€{arr(listaAcquisti.reduce((acc, acquisto) => {
+              if (acquisto.sconto == 0) {
+                return acc + parseImporto(acquisto.ivato) * acquisto.qt
+              } else {
+                return acc + (parseImporto(acquisto.ivato) - (parseImporto(acquisto.ivato) * acquisto.sconto / 100)) * acquisto.qt
+              }
+            }, 0))}</p>
+          </div>
+
         </div>
+
 
 
 
         <div className='zona-destra'>
           <div className='monitor-cassa'>
-            <div className='monito-visual-valore'>{importo}</div>
-            <div className='lista-acquisti-container'>
-              <div className='indicazioni-lista-voci-monitor'>
-                <p>nome  </p>
-                <p>Quantità</p>
-
-                <p>  prezzo</p>
-
-                <p > sconto </p>
-
-                <p >tot</p>
+            <div className='monitor-categorie-prodotti'>
+              <div className='puls-categorie'>
+                {listaCategorie && (
+                  listaCategorie.map((cat) => (
+                    <button key={cat.nome} onClick={() => { setIdCategoria(cat.id) }}>{cat.nome}</button>
+                  ))
+                )}
               </div>
-              {listaAcquisti && listaAcquisti.map((acquisto) => (
-                <VoceAcquisto key={acquisto.id} acquisto={acquisto} setIdProdottoAttuale={setIdProdottoAttuale} idProdottoAttuale={idProdottoAttuale} parseImporto={parseImporto} arr={arr} />
+              <div className='puls-prodotti'>
+                {idCategoria && listaProdotti && (
+                  listaProdotti.filter((prodotto) => prodotto.category_id === idCategoria)
+                    .map((prodotto) => (
+                      <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setListaAcquisti={setListaAcquisti} setIdProdottoAttuale={setIdProdottoAttuale} importo={importo} setImporto={setImporto} />
+                    ))
+
+                )}
+              </div>
+            </div>
+            <div className='contenitore-pulsanti'>
+
+              {Array.from({ length: 10 }, (_, i) => (
+                <Pulsante key={i} val={i} setImporto={setImporto} fattoTotale={fattoTotale} setFattoTotale={setFattoTotale} importo={importo} />
               ))}
+
+
+
+              <button onClick={() => { setImporto(prev => prev.includes(",") ? prev : prev + ","); }}>,</button>
+              <button onClick={() => { impostaQt() }}>QT</button>
+              <button onClick={() => { impostaPrezzo() }}>€</button>
+              <button onClick={() => { impostaSconto() }}>%</button>
+
+              <button onClick={() => { faiTotale() }}>=</button>
+
+              <button onClick={conferma}>Cassa</button>
+              <button onClick={() => { elimina() }}>elimina</button>
+
+
+
+
             </div>
-            <div className={`monitor-valore-totale ${idProdottoAttuale === "totale" ? "evidenziato" : ""}`} key={"totale"} onClick={() => { setIdProdottoAttuale("totale") }}>
-              <p>tot:{arr(listaAcquisti.reduce((acc, acquisto) => {
-                if (acquisto.sconto == 0) {
-                  return acc + parseImporto(acquisto.ivato) * acquisto.qt
-                } else {
-                  return acc + (parseImporto(acquisto.ivato) - (parseImporto(acquisto.ivato) * acquisto.sconto / 100)) * acquisto.qt
-                }
-              }, 0))}</p>
-            </div>
-
           </div>
-          <div className='contenitore-pulsanti'>
-
-            {Array.from({ length: 10 }, (_, i) => (
-              <Pulsante key={i} val={i} setImporto={setImporto} fattoTotale={fattoTotale} setFattoTotale={setFattoTotale} importo={importo} />
-            ))}
-
-
-
-            <button onClick={() => { setImporto(prev => prev.includes(",") ? prev : prev + ","); }}>,</button>
-            <button onClick={() => { impostaQt() }}>QT</button>
-            <button onClick={() => { impostaPrezzo() }}>€</button>
-            <button onClick={() => { impostaSconto() }}>%</button>
-
-            <button onClick={() => { faiTotale() }}>=</button>
-
-            <button onClick={conferma}>Cassa</button>
-            <button onClick={() => { elimina() }}>elimina</button>
-
-
-
-
-          </div>
-        </div>
-      </div >
+        </div >
+      </div>
 
     </>
   )

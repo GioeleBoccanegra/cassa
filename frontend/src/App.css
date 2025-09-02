@@ -126,3 +126,25 @@
   font-weight: bold;
   color: #000;
 }
+
+.indicazioni-lista-voci-monitor {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  /* nome più largo, gli altri uguali */
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.indicazioni-lista-voci-monitor p {
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+  margin: 0;
+  /* togli il 6px se vuoi allineamento perfetto */
+  text-align: left;
+}
+
+.indicazioni-lista-voci-monitor p:first-child {
+  text-align: left;
+}

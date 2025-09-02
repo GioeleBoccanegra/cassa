@@ -1,19 +1,16 @@
 .valore-corrente-acq {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  /* nome più largo, gli altri uguali */
   align-items: center;
-  padding: 0px 0;
+  padding: 4px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  border: solid 1px black;
-  margin: 1px;
-  cursor: pointer;
 }
 
 .nome-prodotto-acq {
   font-size: 13px;
   font-weight: 600;
   color: #000000;
-  margin: 0;
 }
 
 
@@ -21,16 +18,12 @@
   font-size: 15px;
   font-weight: 500;
   color: #17a2b8;
-  /* azzurro */
-  margin: 0 6px;
 }
 
 .monitor-prezzo-prodotto-acq {
   font-size: 15px;
   font-weight: 500;
   color: #28a745;
-  /* verde prezzo unitario */
-  margin: 0 6px;
 }
 
 .monitor-totale-prodotto-acq {
@@ -38,7 +31,6 @@
   font-weight: bold;
   color: #dc3545;
   /* rosso per totale */
-  margin: 0 6px;
 }
 
 .valore-corrente-acq.evidenziato {

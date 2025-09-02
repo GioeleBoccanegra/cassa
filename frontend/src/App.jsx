@@ -56,7 +56,7 @@ function App() {
 
       if (Number(importo) > 0) {
         setListaAcquisti(prev => prev.map(acquisto => acquisto.id === idProdottoAttuale
-          ? { ...acquisto, ivato: importo } : acquisto))
+          ? { ...acquisto, ivato: importo, sconto: 0 } : acquisto))
         setImporto("0")
       }
     } else {
@@ -66,15 +66,17 @@ function App() {
 
 
   const impostaSconto = () => {
-    if (Number(importo) > 0 || Number(importo) < 100) {
+    if (parseImporto(importo) > 0 && parseImporto(importo) < 100) {
       if (idProdottoAttuale !== "totale") {
         setListaAcquisti(prev => {
           return prev.map((prod) => {
             if (prod.id == idProdottoAttuale) {
               return {
-                ...prod, ivato: String(Number(prod.ivato) - (Number(prod.ivato) * Number(importo) / 100))
+                ...prod, sconto: parseImporto(importo)
               }
 
+            } else {
+              return { ...prod }
             }
           })
         })
@@ -83,12 +85,15 @@ function App() {
         setListaAcquisti(prev => {
           return prev.map((prod) => {
             return {
-              ...prod, ivato: String(Number(prod.ivato) - (Number(prod.ivato) * Number(importo) / 100))
+              ...prod, sconto: parseImporto(importo)
             }
           })
         })
 
       }
+      setImporto("0")
+    } else {
+      console.log("non puoi fare sconti superiori al 99%")
     }
   }
 
@@ -156,13 +161,27 @@ function App() {
           <div className='monitor-cassa'>
             <div className='monito-visual-valore'>{importo}</div>
             <div className='lista-acquisti-container'>
+              <div className='indicazioni-lista-voci-monitor'>
+                <p>nome  </p>
+                <p>Quantità</p>
+
+                <p>  prezzo</p>
+
+                <p > sconto </p>
+
+                <p >tot</p>
+              </div>
               {listaAcquisti && listaAcquisti.map((acquisto) => (
-                <VoceAcquisto key={acquisto.id} acquisto={acquisto} setIdProdottoAttuale={setIdProdottoAttuale} idProdottoAttuale={idProdottoAttuale} parseImporto={parseImporto} />
+                <VoceAcquisto key={acquisto.id} acquisto={acquisto} setIdProdottoAttuale={setIdProdottoAttuale} idProdottoAttuale={idProdottoAttuale} parseImporto={parseImporto} arr={arr} />
               ))}
             </div>
             <div className={`monitor-valore-totale ${idProdottoAttuale === "totale" ? "evidenziato" : ""}`} key={"totale"} onClick={() => { setIdProdottoAttuale("totale") }}>
               <p>tot:{arr(listaAcquisti.reduce((acc, acquisto) => {
-                return acc + parseImporto(acquisto.ivato) * acquisto.qt
+                if (acquisto.sconto == 0) {
+                  return acc + parseImporto(acquisto.ivato) * acquisto.qt
+                } else {
+                  return acc + (parseImporto(acquisto.ivato) - (parseImporto(acquisto.ivato) * acquisto.sconto / 100)) * acquisto.qt
+                }
               }, 0))}</p>
             </div>
 

@@ -35,12 +35,15 @@ export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProd
 
 
       } else {
+
         if (importo > 1) {
+
           const nuovoAcquisto = {
             id: prodotto.id,
             nome: prodotto.nome,
             qt: Number(importo),
-            ivato: String(prodotto.ivato)
+            ivato: String(prodotto.ivato),
+            sconto: 0
           };
           setImporto("0");
           return [...prev, nuovoAcquisto];
@@ -51,7 +54,8 @@ export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProd
             id: prodotto.id,
             nome: prodotto.nome,
             qt: 1,
-            ivato: String(prodotto.ivato)
+            ivato: String(prodotto.ivato),
+            sconto: 0
           }]
         }
 

@@ -178,6 +178,11 @@
   transition: background-color 0.2s;
 }
 
+.contenitore-pulsanti button img {
+  height: 23px;
+  width: auto;
+}
+
 .container-pulsante-cassa-tot {
   display: flex;
   justify-content: center;

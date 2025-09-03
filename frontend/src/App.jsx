@@ -5,7 +5,7 @@ import Pulsante from "./components/zona-destra/pulsante/Pulsante"
 import { getCategorie } from './api/getCategorie';
 import { getProdotti } from './api/getProdotti'
 import PulsanteProdotto from './components/zona-sinistra/pulsanteProdotto/PulsanteProdotto';
-
+import Scontrino from './components/pop-up/scontrino/Scontrino';
 import VoceAcquisto from './components/zona-destra/voceAcquisto/VoceAcquisto';
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
   const [idCategoria, setIdCategoria] = useState(null)
   const [listaAcquisti, setListaAcquisti] = useState([])
   const [idProdottoAttuale, setIdProdottoAttuale] = useState();
+  const [visualScontrino, setVisualScontrino] = useState(false)
 
 
 
@@ -28,23 +29,28 @@ function App() {
       }
 
     }
+
+    listaCategorie();
+
+
+
+  }, [idCategoria])
+
+  useEffect(() => {
     const riceviProdotti = async () => {
       const risposta = await getProdotti()
       setListaProdotti(risposta);
     }
-    listaCategorie();
     riceviProdotti();
-
-
-  }, [idCategoria])
+  }, [])
 
   const impostaQt = () => {
     if (idProdottoAttuale !== "totale") {
 
 
-      if (Number(importo) > 0) {
+      if (parseImporto(importo) > 0 && Number.isInteger(parseImporto(importo))) {
         setListaAcquisti(prev => prev.map(acquisto => acquisto.id === idProdottoAttuale
-          ? { ...acquisto, qt: importo } : acquisto))
+          ? { ...acquisto, qt: parseImporto(importo) } : acquisto))
         setImporto("0")
       }
     } else {
@@ -56,9 +62,9 @@ function App() {
   const impostaPrezzo = () => {
     if (idProdottoAttuale !== "totale") {
 
-      if (Number(importo) > 0) {
+      if (parseImporto(importo) > 0) {
         setListaAcquisti(prev => prev.map(acquisto => acquisto.id === idProdottoAttuale
-          ? { ...acquisto, ivato: importo, sconto: 0 } : acquisto))
+          ? { ...acquisto, ivato: parseImporto(importo), sconto: 0 } : acquisto))
         setImporto("0")
       }
     } else {
@@ -99,13 +105,20 @@ function App() {
     }
   }
 
+  const svuota = () => {
+    setVisualScontrino(false)
+    setImporto("0")
+    setIdProdottoAttuale(null)
+    setListaAcquisti([])
+  }
+
 
   const conferma = () => {
-    if (listaAcquisti) {
-      alert("i rpdotti sono: " + listaAcquisti)
-      setImporto("0")
-      setIdProdottoAttuale(null)
-      setListaAcquisti([])
+
+    if (listaAcquisti.length > 0) {
+      console.log(listaAcquisti)
+      setVisualScontrino(true)
+
 
     } else {
       alert("nessun conto da evadere")
@@ -114,13 +127,18 @@ function App() {
 
   }
 
+  const setVirgola = () => {
+    setImporto(prev => prev.includes(",") ? prev : prev + ",");
+    console.log(importo)
+  }
+
   const parseImporto = (imp) => {
     return parseFloat(
-      (imp || "0").replace(",", ".")
+      (String(imp) || "0").replace(",", ".")
     );
   };
 
-  const arr = (tot) => Number.isFinite(tot) ? tot.toFixed(2) : 0;
+  const arr = (tot) => Number.isFinite(tot) ? tot.toFixed(2) : "0,00";
 
 
 
@@ -170,7 +188,7 @@ function App() {
   return (
     <>
       <div className='visual-cassa'>
-
+        {visualScontrino && <Scontrino listaAcquisti={listaAcquisti} svuota={svuota} />}
         <div className='zona-sinistra'>
           <div className='lista-acquisti-container'>
             <div className='indicazioni-lista-voci-monitor'>
@@ -188,7 +206,7 @@ function App() {
             ))}
           </div>
           <div className={`monitor-valore-totale ${idProdottoAttuale === "totale" ? "evidenziato" : ""}`} key={"totale"} onClick={() => { setIdProdottoAttuale("totale") }}>
-            <p className='monitor-visual-valore'>VAL:{parseImporto(importo)}</p>
+            <p className='monitor-visual-valore'>VAL:{arr(parseImporto(importo))}</p>
             <p>TOT:€{arr(listaAcquisti.reduce((acc, acquisto) => {
               if (acquisto.sconto == 0) {
                 return acc + parseImporto(acquisto.ivato) * acquisto.qt
@@ -217,7 +235,7 @@ function App() {
                 {idCategoria && listaProdotti && (
                   listaProdotti.filter((prodotto) => prodotto.category_id === idCategoria)
                     .map((prodotto) => (
-                      <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setListaAcquisti={setListaAcquisti} setIdProdottoAttuale={setIdProdottoAttuale} importo={importo} setImporto={setImporto} />
+                      <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setListaAcquisti={setListaAcquisti} setIdProdottoAttuale={setIdProdottoAttuale} importo={importo} setImporto={setImporto} parseImporto={parseImporto} />
                     ))
 
                 )}
@@ -241,12 +259,12 @@ function App() {
 
                 <button onClick={() => { impostaQt() }}>QT</button>
                 <Pulsante key={0} val={0} setImporto={setImporto} importo={importo} />
-                <button onClick={() => { setImporto(prev => prev.includes(",") ? prev : prev + ","); }}>,</button>
+                <button onClick={() => { setVirgola() }}>,</button>
 
 
                 <button onClick={() => { impostaPrezzo() }}>€</button>
                 <button onClick={() => { impostaSconto() }}>%</button>
-                <button onClick={() => { elimina() }}>elimina</button>
+                <button onClick={() => { elimina() }}><img src="/cestino.png" /></button>
 
 
 

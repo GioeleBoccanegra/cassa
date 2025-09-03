@@ -1,6 +1,6 @@
 
 import "./PulsateProdotto.css"
-export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProdottoAttuale, importo, setImporto }) {
+export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProdottoAttuale, importo, setImporto, parseImporto }) {
 
   const prodottoCliccato = (prodotto) => {
 
@@ -41,8 +41,9 @@ export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProd
           const nuovoAcquisto = {
             id: prodotto.id,
             nome: prodotto.nome,
+            iva: Number(prodotto.iva),
             qt: Number(importo),
-            ivato: String(prodotto.ivato),
+            ivato: parseImporto(prodotto.ivato),
             sconto: 0
           };
           setImporto("0");
@@ -53,8 +54,9 @@ export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProd
           return [...prev, {
             id: prodotto.id,
             nome: prodotto.nome,
+            iva: Number(prodotto.iva),
             qt: 1,
-            ivato: String(prodotto.ivato),
+            ivato: parseImporto(prodotto.ivato),
             sconto: 0
           }]
         }

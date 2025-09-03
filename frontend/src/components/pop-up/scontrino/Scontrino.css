@@ -1,0 +1,107 @@
+.scontrino {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  width: 320px;
+  max-height: 90vh;
+  padding: 20px;
+  border: 2px dashed #000;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  overflow-y: auto;
+  font-family: "Courier New", Courier, monospace;
+  z-index: 2000;
+  color: #000;
+}
+
+.scontrino .intestazione {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.scontrino .intestazione h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.scontrino .intestazione p {
+  margin: 2px 0;
+  font-size: 12px;
+  color: #444;
+}
+
+.corpo {
+  border-top: 1px dashed #aaa;
+  border-bottom: 1px dashed #aaa;
+  padding: 10px 0;
+  margin-bottom: 15px;
+}
+
+.indice-scontrino {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  /* 5 colonne: nome, qt/prezzo, sconto, iva, tot */
+  font-size: 12px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 5px;
+  padding-bottom: 4px;
+}
+
+.voci-scontrino {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  /* corrisponde alle colonne indice */
+  font-size: 12px;
+  margin: 2px 0;
+  align-items: center;
+}
+
+.voci-scontrino p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.totale,
+.iva-su-tot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.iva-su-tot {
+  font-weight: normal;
+  color: #444;
+}
+
+.scontrino button {
+  display: block;
+  margin: 15px auto 0 auto;
+  padding: 8px 15px;
+  background: #000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.scontrino button:hover {
+  background: #444;
+}
+
+/* opzionale: scroll più elegante */
+.scontrino::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scontrino::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}

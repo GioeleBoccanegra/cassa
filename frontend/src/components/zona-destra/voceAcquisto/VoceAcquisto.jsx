@@ -17,7 +17,6 @@ export default function VoceAcquisto({ acquisto, setIdProdottoAttuale, idProdott
           {acquisto.sconto > 0 && (
             <p className='monitor-sconot-prodotto-acq'>  %{acquisto.sconto}</p>
           )}
-
           {acquisto.sconto == 0 && (
             <p className='monitor-sconot-prodotto-acq'> no </p>
           )}

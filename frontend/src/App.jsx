@@ -7,6 +7,7 @@ import { getProdotti } from './api/getProdotti'
 import PulsanteProdotto from './components/zona-sinistra/pulsanteProdotto/PulsanteProdotto';
 import Scontrino from './components/pop-up/scontrino/Scontrino';
 import VoceAcquisto from './components/zona-destra/voceAcquisto/VoceAcquisto';
+import ModifiaCategoria from './components/pop-up/modifica/modificaCategoria/ModificaCategoria';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
   const [listaAcquisti, setListaAcquisti] = useState([])
   const [idProdottoAttuale, setIdProdottoAttuale] = useState();
   const [visualScontrino, setVisualScontrino] = useState(false)
+  const [modCat, setModCat] = useState(null)
 
 
 
@@ -43,6 +45,16 @@ function App() {
     }
     riceviProdotti();
   }, [])
+
+
+  const annullaModCat = () => {
+    setModCat(null)
+  }
+
+  const categoriaModifica = (e, id) => {
+    e.preventDefault()
+    setModCat(id)
+  }
 
   const impostaQt = () => {
     if (idProdottoAttuale !== "totale") {
@@ -129,7 +141,6 @@ function App() {
 
   const setVirgola = () => {
     setImporto(prev => prev.includes(",") ? prev : prev + ",");
-    console.log(importo)
   }
 
   const parseImporto = (imp) => {
@@ -150,8 +161,14 @@ function App() {
 
 
   const elimina = () => {
-    if (importo.length > 0) {
-      setImporto(prev => prev.slice(0, -1));
+    if (parseImporto(importo) > 0) {
+      setImporto(prev => {
+        if (prev.slice(-1) === ",") {
+          return prev.slice(0, -2);
+        } else {
+          return prev.slice(0, -1);
+        }
+      })
     } else {
       if (listaAcquisti) {
         if (idProdottoAttuale == "totale") {
@@ -224,10 +241,14 @@ function App() {
         <div className='zona-destra'>
           <div className='monitor-cassa'>
             <div className='monitor-categorie-prodotti'>
+              {modCat && (
+                <ModifiaCategoria annullaModCat={annullaModCat} categoria={listaCategorie.find((cat) => modCat == cat.id)}
+                />
+              )}
               <div className='puls-categorie'>
                 {listaCategorie && (
                   listaCategorie.map((cat) => (
-                    <button className={idCategoria == cat.id ? "evidenziato" : ""} key={cat.nome} onClick={() => { setIdCategoria(cat.id) }}>{cat.nome}</button>
+                    <button className={idCategoria == cat.id ? "evidenziato" : ""} key={cat.nome} onClick={() => { setIdCategoria(cat.id) }} onContextMenu={(e) => { categoriaModifica(e, cat.id) }}>{cat.nome}</button>
                   ))
                 )}
               </div>

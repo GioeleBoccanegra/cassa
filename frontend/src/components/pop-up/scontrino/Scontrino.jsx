@@ -20,7 +20,6 @@ export default function Scontrino({ listaAcquisti, svuota }) {
       totale += nuovoTot;
       totaleIva += (nuovoTot * acq.iva) / (100 + acq.iva);
     });
-    console.log(listaAcquisti)
 
     setTotaleScontrino(totale);
     setIvaTotaleScontrino(totaleIva);
@@ -48,7 +47,7 @@ export default function Scontrino({ listaAcquisti, svuota }) {
 
         {listaAcquisti && (
           listaAcquisti.map((acq) => {
-            console.log("listaAcquisti nel render:", listaAcquisti);
+
             return (
               <div className="voci-scontrino" key={acq.id}>
                 <p>{acq.nome}</p>
@@ -66,12 +65,12 @@ export default function Scontrino({ listaAcquisti, svuota }) {
 
         <div className="totale">
           <p>TOTALE COMPLESSIVO</p>
-          <p>{totaleScontrino}</p>
+          <p>{totaleScontrino.toFixed(2)}</p>
         </div>
 
         <div className="iva-su-tot">
           <p>di cui iva</p>
-          <p>{ivaTotaleScontrino}</p>
+          <p>{ivaTotaleScontrino.toFixed(2)}</p>
         </div>
 
       </div>

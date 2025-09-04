@@ -1,6 +1,7 @@
+const backendUrl = import.meta.env.VITE_URL_BACKEND
 export const getCategorie = async () => {
   try {
-    const res = await fetch("http://127.0.0.1:8000/api/categorie");
+    const res = await fetch(`${backendUrl}/api/categorie`);
     if (!res.ok) {
       throw new Error("errore nel recupero delle categorie")
     }

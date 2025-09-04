@@ -1,6 +1,8 @@
+const backendUrl = import.meta.env.VITE_URL_BACKEND
+
 export const getProdotti = async () => {
   try {
-    const res = await fetch(`http://127.0.0.1:8000/api/prodotti`);
+    const res = await fetch(`${backendUrl}/api/prodotti`);
     if (!res.ok) {
       throw new Error("errore nel recupero dei prodotti")
     }

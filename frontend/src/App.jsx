@@ -26,9 +26,6 @@ function App() {
     const listaCategorie = async () => {
       const risposta = await getCategorie();
       setListacategorie(risposta)
-      if (idCategoria == null) {
-        setIdCategoria(risposta[0].id)
-      }
 
     }
 
@@ -36,7 +33,7 @@ function App() {
 
 
 
-  }, [idCategoria])
+  }, [])
 
   useEffect(() => {
     const riceviProdotti = async () => {
@@ -45,6 +42,12 @@ function App() {
     }
     riceviProdotti();
   }, [])
+
+  if (idCategoria == null) {
+    setIdCategoria(listaCategorie[0].id)
+  }
+
+
 
 
   const annullaModCat = () => {
@@ -242,7 +245,7 @@ function App() {
           <div className='monitor-cassa'>
             <div className='monitor-categorie-prodotti'>
               {modCat && (
-                <ModifiaCategoria annullaModCat={annullaModCat} categoria={listaCategorie.find((cat) => modCat == cat.id)}
+                <ModifiaCategoria annullaModCat={annullaModCat} categoria={listaCategorie.find((cat) => modCat == cat.id)} setListacategorie={setListacategorie}
                 />
               )}
               <div className='puls-categorie'>

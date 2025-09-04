@@ -8,12 +8,12 @@ export default function ModifiaCategoria({ annullaModCat, categoria, setListacat
   const [nomeCat, setNomeCat] = useState(categoria.nome);
   const [ivaCat, setIvaCat] = useState(categoria.iva);
 
-  const modificaCat = async (id, nome, iva) => {
+  const modificaCat = async () => {
     try {
       const categoriaMod = {
-        id: id,
-        nome: nome,
-        iva: iva
+        id: categoria.id,
+        nome: nomeCat,
+        iva: ivaCat
       }
       const risposta = await putModificaCategoria(categoriaMod)
       console.log(risposta)
@@ -31,9 +31,9 @@ export default function ModifiaCategoria({ annullaModCat, categoria, setListacat
     <div className="pop-up-modifica-overlay" onClick={(e) => e.stopPropagation()} >
       <div className="pop-up-modifica" >
         <h2>Modifica Categoria</h2>
-        <form onSubmit={(e) => { e.preventDefault(); modificaCat(categoria.id, nomeCat, ivaCat) }}>
+        <form onSubmit={(e) => { e.preventDefault(); modificaCat() }}>
           <div className="form-group">
-            <label htmlFor="nome">{categoria.nome}</label>
+            <label htmlFor="nome">Nome categoria</label>
             <input id="nome" type="text" value={nomeCat} onChange={(e) => { setNomeCat(e.target.value) }} />
           </div>
 

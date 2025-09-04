@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
+
 class ProductController extends Controller
 {
     public function store(Request $request)
@@ -57,6 +58,53 @@ class ProductController extends Controller
         try {
             $prodotti = Product::all();
             return response()->json($prodotti);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
+    public function modProduct(Request $request, $productId)
+    {
+
+        if (!Product::where("id", $productId)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Categoria non trovata'
+            ], 404);
+        }
+
+
+        try {
+            $request->validate([
+                "category_id" => "required|exists:categories,id",
+                "nome" => "required|string|max:30",
+                "ivato" => "required|numeric|min:0",
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['errore nella validazione dei dati' => $e->errors()], 422);
+        };
+
+
+        try {
+
+
+            $product = Product::findOrFail($productId);
+            $iva = $product->iva;
+            $imponibile = $request->ivato * 100 / (100 + $iva);
+            $val_iva = $request->ivato - $imponibile;
+
+            $product->nome = $request->nome;
+            $product->imponibile = round($imponibile, 2);
+            $product->ivato = $request->ivato;
+            $product->val_iva = round($val_iva, 2);
+            $product->save();
+
+            return response()->json([
+                "success" => true,
+                "message" => "prodotto aggiornata con successo",
+                "categoria" => "prodotto"
+            ], 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

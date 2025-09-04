@@ -7,7 +7,8 @@ import { getProdotti } from './api/getProdotti'
 import PulsanteProdotto from './components/zona-sinistra/pulsanteProdotto/PulsanteProdotto';
 import Scontrino from './components/pop-up/scontrino/Scontrino';
 import VoceAcquisto from './components/zona-destra/voceAcquisto/VoceAcquisto';
-import ModifiaCategoria from './components/pop-up/modifica/modificaCategoria/ModificaCategoria';
+import ModificaCategoria from './components/pop-up/modifica/modificaCategoria/ModificaCategoria';
+import ModifiaProdotto from './components/pop-up/modifica/modificaProdotto/ModificaProdotto';
 
 function App() {
 
@@ -19,6 +20,10 @@ function App() {
   const [idProdottoAttuale, setIdProdottoAttuale] = useState();
   const [visualScontrino, setVisualScontrino] = useState(false)
   const [modCat, setModCat] = useState(null)
+  const [modProd, setModProd] = useState(null)
+
+
+
 
 
 
@@ -39,13 +44,13 @@ function App() {
     const riceviProdotti = async () => {
       const risposta = await getProdotti()
       setListaProdotti(risposta);
+      console.log(risposta)
     }
+
     riceviProdotti();
   }, [])
 
-  if (idCategoria == null) {
-    setIdCategoria(listaCategorie[0].id)
-  }
+
 
 
 
@@ -57,6 +62,16 @@ function App() {
   const categoriaModifica = (e, id) => {
     e.preventDefault()
     setModCat(id)
+  }
+
+  const annullaModProd = () => {
+    setModProd(null)
+  }
+
+  const prodottoModifica = (e, id) => {
+    e.preventDefault()
+    setModProd(id)
+    console.log(listaProdotti);
   }
 
   const impostaQt = () => {
@@ -245,8 +260,13 @@ function App() {
           <div className='monitor-cassa'>
             <div className='monitor-categorie-prodotti'>
               {modCat && (
-                <ModifiaCategoria annullaModCat={annullaModCat} categoria={listaCategorie.find((cat) => modCat == cat.id)} setListacategorie={setListacategorie}
+                <ModificaCategoria annullaModCat={annullaModCat} categoria={listaCategorie.find((cat) => modCat == cat.id)} setListacategorie={setListacategorie}
                 />
+              )}
+              {modProd && (
+                <ModifiaProdotto annullaModProd={annullaModProd} prodotto={
+                  listaProdotti.find((prod) => modProd == prod.id)}
+                  setListaProdotti={setListaProdotti} />
               )}
               <div className='puls-categorie'>
                 {listaCategorie && (
@@ -259,7 +279,7 @@ function App() {
                 {idCategoria && listaProdotti && (
                   listaProdotti.filter((prodotto) => prodotto.category_id === idCategoria)
                     .map((prodotto) => (
-                      <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setListaAcquisti={setListaAcquisti} setIdProdottoAttuale={setIdProdottoAttuale} importo={importo} setImporto={setImporto} parseImporto={parseImporto} />
+                      <PulsanteProdotto key={prodotto.id} prodotto={prodotto} setListaAcquisti={setListaAcquisti} setIdProdottoAttuale={setIdProdottoAttuale} importo={importo} setImporto={setImporto} parseImporto={parseImporto} prodottoModifica={prodottoModifica} />
                     ))
 
                 )}

@@ -1,6 +1,6 @@
 
 import "./PulsateProdotto.css"
-export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProdottoAttuale, importo, setImporto, parseImporto }) {
+export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProdottoAttuale, importo, setImporto, parseImporto, prodottoModifica }) {
 
   const prodottoCliccato = (prodotto) => {
 
@@ -71,9 +71,11 @@ export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProd
   }
 
   return (
-    <div className="pulsante-prodotto" onClick={() => { prodottoCliccato(prodotto) }}>
+    <div className="pulsante-prodotto" onClick={() => { prodottoCliccato(prodotto) }} onContextMenu={(e) => {
+      prodottoModifica(e, prodotto.id)
+    }} >
       <p className="pulsante-nome-prodotto">{prodotto.nome}</p>
       <p className="pulsante-ivato-prodotto">€{prodotto.ivato}</p>
-    </div>
+    </div >
   )
 }

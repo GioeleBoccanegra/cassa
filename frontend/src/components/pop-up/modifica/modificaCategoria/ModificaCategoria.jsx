@@ -3,8 +3,9 @@ import "./ModificaCatgeoria.css"
 import { putModificaCategoria } from "../../../../api/putModificaCategoria"
 import { useState } from "react"
 import { getCategorie } from "../../../../api/getCategorie";
+import { getProdotti } from "../../../../api/getProdotti"
 
-export default function ModifiaCategoria({ annullaModCat, categoria, setListacategorie }) {
+export default function ModifiaCategoria({ annullaModCat, categoria, setListaCategorie, setListaProdotti }) {
   const [nomeCat, setNomeCat] = useState(categoria.nome);
   const [ivaCat, setIvaCat] = useState(categoria.iva);
 
@@ -13,12 +14,14 @@ export default function ModifiaCategoria({ annullaModCat, categoria, setListacat
       const categoriaMod = {
         id: categoria.id,
         nome: nomeCat,
-        iva: ivaCat
+        iva: Number(ivaCat)
       }
       const risposta = await putModificaCategoria(categoriaMod)
       console.log(risposta)
       const nuoveCategorie = await getCategorie();
-      setListacategorie(nuoveCategorie);
+      setListaCategorie(nuoveCategorie);
+      const nuoviProdotti = await getProdotti()
+      setListaProdotti(nuoviProdotti);
       annullaModCat()
     } catch (e) {
       console.log(e)

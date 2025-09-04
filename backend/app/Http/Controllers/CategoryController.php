@@ -55,7 +55,7 @@ class CategoryController extends Controller
         try {
             $request->validate([
                 "nome" => "required|string|max:30",
-                "iva" => "required|numeric|in:4,10,22",
+                "iva" => "required|numeric|in:4,5,10,22",
             ]);
         } catch (ValidationException $e) {
             return response()->json(['errore nella validazione dei dati' => $e->errors()], 422);
@@ -68,11 +68,8 @@ class CategoryController extends Controller
             $category->iva = $request->iva;
             $category->save();
 
-            $products = Product::where("category_id", $categoryId)->get();
-            foreach ($products as $prod) {
-                $prod->iva = $category->iva;
-                $prod->save();
-            }
+            Product::where("category_id", $categoryId)
+                ->update(["iva" => $category->iva]);
 
             return response()->json([
                 "success" => true,

@@ -13,7 +13,7 @@ import ModifiaProdotto from './components/pop-up/modifica/modificaProdotto/Modif
 function App() {
 
   const [importo, setImporto] = useState("");
-  const [listaCategorie, setListacategorie] = useState([]);
+  const [listaCategorie, setListaCategorie] = useState([]);
   const [listaProdotti, setListaProdotti] = useState([]);
   const [idCategoria, setIdCategoria] = useState(null)
   const [listaAcquisti, setListaAcquisti] = useState([])
@@ -30,7 +30,7 @@ function App() {
   useEffect(() => {
     const listaCategorie = async () => {
       const risposta = await getCategorie();
-      setListacategorie(risposta)
+      setListaCategorie(risposta)
 
     }
 
@@ -260,7 +260,7 @@ function App() {
           <div className='monitor-cassa'>
             <div className='monitor-categorie-prodotti'>
               {modCat && (
-                <ModificaCategoria annullaModCat={annullaModCat} categoria={listaCategorie.find((cat) => modCat == cat.id)} setListacategorie={setListacategorie}
+                <ModificaCategoria annullaModCat={annullaModCat} categoria={listaCategorie.find((cat) => modCat == cat.id)} setListaCategorie={setListaCategorie} setListaProdotti={setListaProdotti}
                 />
               )}
               {modProd && (

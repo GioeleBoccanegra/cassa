@@ -1,6 +1,6 @@
 const backendUrl = import.meta.env.VITE_URL_BACKEND
 
-
+import { Validazione } from "../utils/validazione/Validazione";
 
 export const patchModificaProdotto = async (prod) => {
   try {
@@ -17,11 +17,9 @@ export const patchModificaProdotto = async (prod) => {
       })
     });
 
-    if (!res.ok) {
-      throw new Error("errore nella modifica del prodotto")
-    }
+    const data = Validazione(res)
 
-    const data = await res.json()
+
     return data
   } catch (error) {
     if (error.message.includes("Failed to fetch") || error.message.includes("ECONNREFUSED")) {

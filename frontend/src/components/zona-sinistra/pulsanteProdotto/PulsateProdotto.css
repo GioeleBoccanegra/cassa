@@ -6,6 +6,8 @@
   cursor: pointer;
   transition: background-color 0.2s;
   height: auto;
+  width: 10vw;
+  max-height: 10vh;
 }
 
 .pulsante-prodotto:hover {

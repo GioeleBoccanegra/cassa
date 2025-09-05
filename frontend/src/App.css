@@ -145,11 +145,17 @@
 }
 
 .puls-prodotti {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   justify-content: start;
-  align-items: start;
+  align-items: stretch;
+  overflow: auto
+}
+
+.puls-prodotti button {
+  width: 10vw;
+  max-height: 10vh;
 }
 
 .tutti-pulsanti-calc {

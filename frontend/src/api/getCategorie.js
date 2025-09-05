@@ -1,9 +1,11 @@
 const backendUrl = import.meta.env.VITE_URL_BACKEND
 export const getCategorie = async () => {
+  console.log(backendUrl)
   try {
     const res = await fetch(`${backendUrl}/api/categorie`);
     if (!res.ok) {
-      throw new Error("errore nel recupero delle categorie")
+      const res = await res.json();
+      throw new Error(res.errore || "errore nel recupero delle categorie")
     }
 
     const data = await res.json();

@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import Pulsante from "./components/zona-destra/pulsante/Pulsante"
 import { getCategorie } from './api/getCategorie';
@@ -10,6 +10,9 @@ import VoceAcquisto from './components/zona-destra/voceAcquisto/VoceAcquisto';
 import ModificaCategoria from './components/pop-up/modifica/modificaCategoria/ModificaCategoria';
 import ModificaProdotto from './components/pop-up/modifica/modificaProdotto/ModificaProdotto';
 import CreaCategoria from './components/pop-up/creazione/creaCategoria/CreaCategoria';
+import CreaProdotto from './components/pop-up/creazione/creaProdotto/CreaProdotto';
+import Loader from "./utils/loader/Loader"
+import Errore from "./utils/errore/Errore"
 function App() {
 
   const [importo, setImporto] = useState("");
@@ -22,6 +25,11 @@ function App() {
   const [modCat, setModCat] = useState(null)
   const [modProd, setModProd] = useState(null)
   const [mostaCreaCategoria, setMostraCreaCategoria] = useState(false);
+  const [mostraCreaProdotto, setMostraCreaProdotto] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("")
+
+  const initDone = useRef(false);
 
 
 
@@ -30,10 +38,27 @@ function App() {
 
   useEffect(() => {
     const listaCategorie = async () => {
-      const risposta = await getCategorie();
-      setListaCategorie(risposta)
+      setLoading(true)
+      try {
+        const risposta = await getCategorie();
+        setListaCategorie(risposta)
+
+        if (!initDone.current && risposta.length > 0) {
+          setIdCategoria(risposta[0].id);
+          initDone.current = true;
+        }
+
+      } catch (e) {
+        setError(e)
+      } finally {
+        setLoading(false)
+      }
+
+
 
     }
+
+
 
     listaCategorie();
 
@@ -41,12 +66,25 @@ function App() {
 
   }, [])
 
+
+
   useEffect(() => {
+
+
     const riceviProdotti = async () => {
-      const risposta = await getProdotti()
-      setListaProdotti(risposta);
-      console.log(risposta)
+      setLoading(true)
+      try {
+        const risposta = await getProdotti()
+        setListaProdotti(risposta);
+        console.log(risposta)
+      } catch (e) {
+        setError(e)
+      } finally {
+        setLoading(false)
+      }
+
     }
+
 
     riceviProdotti();
   }, [])
@@ -72,16 +110,20 @@ function App() {
   const prodottoModifica = (e, id) => {
     e.preventDefault()
     setModProd(id)
-    console.log(listaProdotti);
   }
   const annullaCreaCategoria = () => {
     setMostraCreaCategoria(false)
+  }
+
+  const annullaCreaProdotto = () => {
+    setMostraCreaProdotto(false)
   }
 
 
 
 
   const impostaQt = () => {
+    setError("")
     if (idProdottoAttuale !== "totale") {
 
 
@@ -91,12 +133,13 @@ function App() {
         setImporto("0")
       }
     } else {
-      console.log("sei su totale")
+      setError("impossibile assegnare una quantità al totale")
     }
 
   }
 
   const impostaPrezzo = () => {
+    setError("")
     if (idProdottoAttuale !== "totale") {
 
       if (parseImporto(importo) > 0) {
@@ -105,12 +148,13 @@ function App() {
         setImporto("0")
       }
     } else {
-      console.log("sei su totale")
+      setError("impossibile assegnare un prezzo al totale")
     }
   }
 
 
   const impostaSconto = () => {
+    setError("")
     if (parseImporto(importo) > 0 && parseImporto(importo) < 100) {
       if (idProdottoAttuale !== "totale") {
         setListaAcquisti(prev => {
@@ -138,7 +182,7 @@ function App() {
       }
       setImporto("0")
     } else {
-      console.log("non puoi fare sconti superiori al 99%")
+      setError("non puoi fare sconti superiori al 99%")
     }
   }
 
@@ -151,6 +195,7 @@ function App() {
 
 
   const conferma = () => {
+    setError("")
 
     if (listaAcquisti.length > 0) {
       console.log(listaAcquisti)
@@ -158,7 +203,7 @@ function App() {
 
 
     } else {
-      alert("nessun conto da evadere")
+      setError("nessun conto da evadere")
     }
 
 
@@ -231,6 +276,8 @@ function App() {
     <>
       <div className='visual-cassa'>
         {visualScontrino && <Scontrino listaAcquisti={listaAcquisti} svuota={svuota} />}
+        {loading && <Loader />}
+        {error && <Errore error={error} setError={setError} />}
         <div className='zona-sinistra'>
           <div className='lista-acquisti-container'>
             <div className='indicazioni-lista-voci-monitor'>
@@ -275,6 +322,7 @@ function App() {
                   listaProdotti.find((prod) => modProd == prod.id)}
                   setListaProdotti={setListaProdotti} />
               )}
+              {mostraCreaProdotto && <CreaProdotto annullaCreaProdotto={annullaCreaProdotto} setListaProdotti={setListaProdotti} idCategoria={idCategoria} />}
               {mostaCreaCategoria && <CreaCategoria annullaCreaCategoria={annullaCreaCategoria} setListaCategorie={setListaCategorie} />}
               <div className='puls-categorie'>
                 {listaCategorie && (
@@ -282,6 +330,7 @@ function App() {
                     <button className={idCategoria == cat.id ? "evidenziato" : ""} key={cat.nome} onClick={() => { setIdCategoria(cat.id) }} onContextMenu={(e) => { categoriaModifica(e, cat.id) }}>{cat.nome}</button>
                   ))
                 )}
+
                 <button onClick={() => { setMostraCreaCategoria(true) }}>+</button>
               </div>
               <div className='puls-prodotti'>
@@ -292,7 +341,7 @@ function App() {
                     ))
 
                 )}
-
+                <button onClick={() => { setMostraCreaProdotto(true) }}>+</button>
               </div>
             </div>
             <div className='tutti-pulsanti-calc'>

@@ -13,10 +13,15 @@ class CategoryController extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate([
-            "nome" => "required|string|max:30",
-            "iva" => "required|numeric|in:4,10,22",
-        ]);
+        try {
+            $request->validate([
+                "nome" => "required|string|max:30",
+                "iva" => "required|numeric|in:4,5,10,22",
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['errore nella validazione dei dati' => $e->errors()], 422);
+        };
+
 
         try {
             $category = Category::create([

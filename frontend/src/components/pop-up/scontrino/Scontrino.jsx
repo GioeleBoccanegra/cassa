@@ -28,56 +28,59 @@ export default function Scontrino({ listaAcquisti, svuota }) {
   }, [listaAcquisti]);
 
   return (
-
-    <div className="scontrino">
-      <div className="intestazione">
-        <h2> Nome Azienda </h2>
-        <p>Via dell'azienda </p>
-        <p>contatti</p>
-        <p>p.iva</p>
-      </div>
-
-      <div className="corpo">
-        <div className="indice-scontrino">
-          <p>Descrizione</p>
-          <p>IVA</p>
-          <p>Prezzo</p>
+    <div className="background-scontrino" onClick={(e) => { e.stopPropagation() }}>
+      <div className="scontrino">
+        <div className="intestazione">
+          <h2> Nome Azienda </h2>
+          <p>Via dell'azienda </p>
+          <p>contatti</p>
+          <p>p.iva</p>
         </div>
 
+        <div className="corpo">
+          <div className="indice-scontrino">
+            <p>Descrizione</p>
+            <p>IVA</p>
+            <p>Prezzo</p>
+          </div>
 
-        {listaAcquisti && (
-          listaAcquisti.map((acq) => {
 
-            return (
-              <div className="voci-scontrino" key={acq.id}>
-                <p>{acq.nome}</p>
+          {listaAcquisti && (
+            listaAcquisti.map((acq) => {
 
-                <p>{acq.qt > 1 ? (acq.qt + "X" + acq.ivato) : ""}</p>
-                <p>{acq.sconto > 0 ? "Sconti: " + (acq.ivato * acq.sconto / 100).toFixed(2) : ""}</p>
-                <p>{acq.iva}</p>
-                <p>{acq.sconto > 0 ? (acq.qt * (acq.ivato - ((acq.ivato * acq.sconto)) / 100)).toFixed(2) : (acq.qt * acq.ivato).toFixed(2)}</p>
+              return (
 
-              </div>
-            )
+                <div className="voci-scontrino" key={acq.id}>
+                  <p>{acq.nome}</p>
 
-          })
-        )}
+                  <p>{acq.qt > 1 ? (acq.qt + "X" + acq.ivato) : ""}</p>
+                  <p>{acq.sconto > 0 ? "Sconti: " + (acq.ivato * acq.sconto / 100).toFixed(2) : ""}</p>
+                  <p>{acq.iva}</p>
+                  <p>{acq.sconto > 0 ? (acq.qt * (acq.ivato - ((acq.ivato * acq.sconto)) / 100)).toFixed(2) : (acq.qt * acq.ivato).toFixed(2)}</p>
 
-        <div className="totale">
-          <p>TOTALE COMPLESSIVO</p>
-          <p>{totaleScontrino.toFixed(2)}</p>
+                </div>
+
+              )
+
+            })
+          )}
+
+          <div className="totale">
+            <p>TOTALE COMPLESSIVO</p>
+            <p>{totaleScontrino.toFixed(2)}</p>
+          </div>
+
+          <div className="iva-su-tot">
+            <p>di cui iva</p>
+            <p>{ivaTotaleScontrino.toFixed(2)}</p>
+          </div>
+
         </div>
-
-        <div className="iva-su-tot">
-          <p>di cui iva</p>
-          <p>{ivaTotaleScontrino.toFixed(2)}</p>
-        </div>
-
-      </div>
-      <button onClick={() => { svuota() }}>chiudi</button>
+        <button onClick={() => { svuota() }}>chiudi</button>
 
 
-    </div >
+      </div >
+    </div>
   )
 
 }

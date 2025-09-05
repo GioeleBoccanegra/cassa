@@ -1,6 +1,8 @@
 
+import { useState } from "react";
 import "./PulsateProdotto.css"
 export default function PulsanteProdotto({ prodotto, setListaAcquisti, setIdProdottoAttuale, importo, setImporto, parseImporto, prodottoModifica }) {
+
 
   const prodottoCliccato = (prodotto) => {
 

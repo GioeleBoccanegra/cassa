@@ -2,33 +2,47 @@ import { useState } from "react";
 import "./CreaCategoria.css"
 import { postCreaCategoria } from "../../../../api/postCreaCategoria"
 import { getCategorie } from "../../../../api/getCategorie";
+import Loader from "../../../../utils/loader/Loader";
+import Errore from "../../../../utils/errore/Errore";
 
 export default function CreaCategoria({ annullaCreaCategoria, setListaCategorie }) {
   const [nomeCat, setNomeCat] = useState("");
   const [ivaCat, setIvaCat] = useState("");
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("")
+
 
   const creazioneCategoria = async (nome, iva) => {
 
+    setLoading(true);
+    try {
+      const categoria = {
+        nome: nome,
+        iva: iva
+      }
 
-    const categoria = {
-      nome: nome,
-      iva: iva
+      const nuovaCat = await postCreaCategoria(categoria);
+      console.log(nuovaCat)
+      const nuoveCategorie = await getCategorie()
+      setListaCategorie(nuoveCategorie)
+
+      annullaCreaCategoria()
+    } catch (e) {
+      setError(e.message || "errreo sconosciuto")
+    } finally {
+      setLoading(false)
     }
-
-    const nuovaCat = await postCreaCategoria(categoria);
-    console.log(nuovaCat)
-    const nuoveCategorie = await getCategorie()
-    setListaCategorie(nuoveCategorie)
-
-    annullaCreaCategoria()
-
 
 
   }
 
   return (
+
     <div className="pop-up-modifica-overlay" onClick={(e) => e.stopPropagation()} >
+      {loading && <Loader />}
+
+      {error && <Errore error={error} setError={setError} />}
       <div className="pop-up-modifica" >
         <h2>Crea Categoria</h2>
         <form onSubmit={(e) => { e.preventDefault(); creazioneCategoria(nomeCat, ivaCat) }}>
@@ -43,7 +57,7 @@ export default function CreaCategoria({ annullaCreaCategoria, setListaCategorie 
           </div>
 
           <div className="button-group">
-            <button type="submit" className="btn-confirm">Conferma</button>
+            <button type="submit" className="btn-confirm">Crea</button>
             <button type="button" className="btn-cancel" onClick={() => annullaCreaCategoria()}>Annulla</button>
           </div>
         </form>

@@ -3,23 +3,19 @@ import { useState } from "react"
 import { patchModificaProdotto } from "../../../../api/patchModificaProdotto";
 import { getProdotti } from "../../../../api/getProdotti"
 import { deleteProduct } from "../../../../api/deleteProduct"
+import Loader from "../../../../utils/loader/Loader";
+import Errore from "../../../../utils/errore/Errore";
 
 
 export default function ModificaProdotto({ annullaModProd, prodotto, setListaProdotti }) {
 
   const [nomeProd, setNomeProd] = useState(prodotto.nome);
   const [ivatoProd, setIvatoProd] = useState(prodotto.ivato);
-
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("")
 
   const modificaProdotto = async () => {
-    /*const nuovoProdotto = {
-      category_id: prodotto.category_id,
-      iva: prodotto.iva,
-      imponibile: (ivatoProd * 100 / (100 + prodotto.iva)).toFixed(2),
-      ivato: ivatoProd,
-      nome: nomeProd,
-      val_iva: (ivatoProd * prodotto.iva / (100 + prodotto.iva)).toFixed(2)
-    }*/
+    setLoading(true)
     try {
       const prodottoModificato = {
         id: prodotto.id,
@@ -35,8 +31,9 @@ export default function ModificaProdotto({ annullaModProd, prodotto, setListaPro
       setListaProdotti(nuovaLista)
       annullaModProd();
     } catch (e) {
-
-      console.log(e)
+      setError(e.message || "errreo sconosciuto")
+    } finally {
+      setLoading(false)
     }
 
   }
@@ -45,6 +42,7 @@ export default function ModificaProdotto({ annullaModProd, prodotto, setListaPro
 
 
   const deleteProdotto = async (id) => {
+    setLoading(true)
     try {
       const risposta = await deleteProduct(id)
       console.log(risposta)
@@ -52,13 +50,18 @@ export default function ModificaProdotto({ annullaModProd, prodotto, setListaPro
       setListaProdotti(nuoveCategorie);
       annullaModProd()
     } catch (e) {
-      console.log(e)
+      setError(e.message || "errreo sconosciuto")
+    } finally {
+      setLoading(false)
     }
   }
 
 
   return (
     <div className="pop-up-modifica-overlay" onClick={(e) => e.stopPropagation()} >
+      {loading && <Loader />}
+
+      {error && <Errore error={error} setError={setError} />}
       <div className="pop-up-modifica" >
         <h2>Modifica prodotto</h2>
         <form onSubmit={(e) => { e.preventDefault(); modificaProdotto() }}>

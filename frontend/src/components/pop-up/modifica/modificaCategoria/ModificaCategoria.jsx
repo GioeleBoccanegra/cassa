@@ -5,12 +5,17 @@ import { useState } from "react"
 import { getCategorie } from "../../../../api/getCategorie";
 import { getProdotti } from "../../../../api/getProdotti"
 import { deleteCategoria } from "../../../../api/deleteCategoria"
+import Loader from "../../../../utils/loader/Loader";
+import Errore from "../../../../utils/errore/Errore";
 
 export default function ModifiaCategoria({ annullaModCat, categoria, setListaCategorie, setListaProdotti }) {
   const [nomeCat, setNomeCat] = useState(categoria.nome);
   const [ivaCat, setIvaCat] = useState(categoria.iva);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("")
 
   const modificaCat = async () => {
+    setLoading(true)
     try {
       const categoriaMod = {
         id: categoria.id,
@@ -25,11 +30,14 @@ export default function ModifiaCategoria({ annullaModCat, categoria, setListaCat
       setListaProdotti(nuoviProdotti);
       annullaModCat()
     } catch (e) {
-      console.log(e)
+      setError(e.message || "errreo sconosciuto")
+    } finally {
+      setLoading(false)
     }
   }
 
   const deleteCat = async (id) => {
+    setLoading(true)
     try {
       const risposta = await deleteCategoria(id)
       console.log(risposta)
@@ -37,7 +45,9 @@ export default function ModifiaCategoria({ annullaModCat, categoria, setListaCat
       setListaCategorie(nuoveCategorie);
       annullaModCat()
     } catch (e) {
-      console.log(e)
+      setError(e.message || "errreo sconosciuto")
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -45,6 +55,9 @@ export default function ModifiaCategoria({ annullaModCat, categoria, setListaCat
 
   return (
     <div className="pop-up-modifica-overlay" onClick={(e) => e.stopPropagation()} >
+      {loading && <Loader />}
+
+      {error && <Errore error={error} setError={setError} />}
       <div className="pop-up-modifica" >
         <h2>Modifica Categoria</h2>
         <form onSubmit={(e) => { e.preventDefault(); modificaCat() }}>

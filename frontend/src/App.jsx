@@ -8,8 +8,8 @@ import PulsanteProdotto from './components/zona-sinistra/pulsanteProdotto/Pulsan
 import Scontrino from './components/pop-up/scontrino/Scontrino';
 import VoceAcquisto from './components/zona-destra/voceAcquisto/VoceAcquisto';
 import ModificaCategoria from './components/pop-up/modifica/modificaCategoria/ModificaCategoria';
-import ModifiaProdotto from './components/pop-up/modifica/modificaProdotto/ModificaProdotto';
-
+import ModificaProdotto from './components/pop-up/modifica/modificaProdotto/ModificaProdotto';
+import CreaCategoria from './components/pop-up/creazione/creaCategoria/CreaCategoria';
 function App() {
 
   const [importo, setImporto] = useState("");
@@ -21,6 +21,7 @@ function App() {
   const [visualScontrino, setVisualScontrino] = useState(false)
   const [modCat, setModCat] = useState(null)
   const [modProd, setModProd] = useState(null)
+  const [mostaCreaCategoria, setMostraCreaCategoria] = useState(false);
 
 
 
@@ -73,6 +74,12 @@ function App() {
     setModProd(id)
     console.log(listaProdotti);
   }
+  const annullaCreaCategoria = () => {
+    setMostraCreaCategoria(false)
+  }
+
+
+
 
   const impostaQt = () => {
     if (idProdottoAttuale !== "totale") {
@@ -264,16 +271,18 @@ function App() {
                 />
               )}
               {modProd && (
-                <ModifiaProdotto annullaModProd={annullaModProd} prodotto={
+                <ModificaProdotto annullaModProd={annullaModProd} prodotto={
                   listaProdotti.find((prod) => modProd == prod.id)}
                   setListaProdotti={setListaProdotti} />
               )}
+              {mostaCreaCategoria && <CreaCategoria annullaCreaCategoria={annullaCreaCategoria} setListaCategorie={setListaCategorie} />}
               <div className='puls-categorie'>
                 {listaCategorie && (
                   listaCategorie.map((cat) => (
                     <button className={idCategoria == cat.id ? "evidenziato" : ""} key={cat.nome} onClick={() => { setIdCategoria(cat.id) }} onContextMenu={(e) => { categoriaModifica(e, cat.id) }}>{cat.nome}</button>
                   ))
                 )}
+                <button onClick={() => { setMostraCreaCategoria(true) }}>+</button>
               </div>
               <div className='puls-prodotti'>
                 {idCategoria && listaProdotti && (
@@ -283,6 +292,7 @@ function App() {
                     ))
 
                 )}
+
               </div>
             </div>
             <div className='tutti-pulsanti-calc'>

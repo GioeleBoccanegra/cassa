@@ -53,9 +53,9 @@ export default function Scontrino({ listaAcquisti, svuota }) {
                 <p>{acq.nome}</p>
 
                 <p>{acq.qt > 1 ? (acq.qt + "X" + acq.ivato) : ""}</p>
-                <p>{acq.sconto > 0 ? "Sconti: " + (acq.ivato * acq.sconto / 100) : ""}</p>
+                <p>{acq.sconto > 0 ? "Sconti: " + (acq.ivato * acq.sconto / 100).toFixed(2) : ""}</p>
                 <p>{acq.iva}</p>
-                <p>{acq.sconto > 0 ? acq.qt * (acq.ivato - ((acq.ivato * acq.sconto) / 100)) : acq.qt * acq.ivato}</p>
+                <p>{acq.sconto > 0 ? (acq.qt * (acq.ivato - ((acq.ivato * acq.sconto)) / 100)).toFixed(2) : (acq.qt * acq.ivato).toFixed(2)}</p>
 
               </div>
             )

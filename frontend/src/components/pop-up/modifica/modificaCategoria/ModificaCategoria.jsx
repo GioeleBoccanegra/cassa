@@ -4,6 +4,7 @@ import { putModificaCategoria } from "../../../../api/putModificaCategoria"
 import { useState } from "react"
 import { getCategorie } from "../../../../api/getCategorie";
 import { getProdotti } from "../../../../api/getProdotti"
+import { deleteCategoria } from "../../../../api/deleteCategoria"
 
 export default function ModifiaCategoria({ annullaModCat, categoria, setListaCategorie, setListaProdotti }) {
   const [nomeCat, setNomeCat] = useState(categoria.nome);
@@ -28,6 +29,18 @@ export default function ModifiaCategoria({ annullaModCat, categoria, setListaCat
     }
   }
 
+  const deleteCat = async (id) => {
+    try {
+      const risposta = await deleteCategoria(id)
+      console.log(risposta)
+      const nuoveCategorie = await getCategorie();
+      setListaCategorie(nuoveCategorie);
+      annullaModCat()
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
 
 
   return (
@@ -45,11 +58,15 @@ export default function ModifiaCategoria({ annullaModCat, categoria, setListaCat
             <input id="iva" type="number" value={ivaCat} onChange={(e) => { setIvaCat(e.target.value) }} />
           </div>
 
+
+
+
           <div className="button-group">
             <button type="submit" className="btn-confirm">Conferma</button>
             <button type="button" className="btn-cancel" onClick={() => annullaModCat()}>Annulla</button>
           </div>
         </form>
+        <button onClick={() => { deleteCat(categoria.id) }}>elimina</button>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import "./ModificaProdotto.css"
 import { useState } from "react"
 import { patchModificaProdotto } from "../../../../api/patchModificaProdotto";
 import { getProdotti } from "../../../../api/getProdotti"
+import { deleteProduct } from "../../../../api/deleteProduct"
 
 
 export default function ModificaProdotto({ annullaModProd, prodotto, setListaProdotti }) {
@@ -41,6 +42,21 @@ export default function ModificaProdotto({ annullaModProd, prodotto, setListaPro
   }
 
 
+
+
+  const deleteProdotto = async (id) => {
+    try {
+      const risposta = await deleteProduct(id)
+      console.log(risposta)
+      const nuoveCategorie = await getProdotti();
+      setListaProdotti(nuoveCategorie);
+      annullaModProd()
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+
   return (
     <div className="pop-up-modifica-overlay" onClick={(e) => e.stopPropagation()} >
       <div className="pop-up-modifica" >
@@ -66,6 +82,8 @@ export default function ModificaProdotto({ annullaModProd, prodotto, setListaPro
             <button type="button" className="btn-cancel" onClick={() => annullaModProd()}>Annulla</button>
           </div>
         </form>
+
+        <button onClick={() => { deleteProdotto(prodotto.id) }}>elimina</button>
       </div>
     </div>
   );

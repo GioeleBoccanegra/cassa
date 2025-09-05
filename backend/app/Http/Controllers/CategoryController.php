@@ -82,6 +82,28 @@ class CategoryController extends Controller
     }
 
 
+    public function deleteCategoria($categoryId)
+    {
+        try {
+            $deleted = Category::destroy($categoryId);
+
+            if ($deleted) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Categoria eliminata con successo'
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Categoria non trovata'
+                ], 404);
+            }
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
 
 
     /*public function seeProductInCategory($categoryid)

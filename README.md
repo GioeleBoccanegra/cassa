@@ -1,7 +1,4 @@
-Perfetto 🙌 allora aggiorniamo il README includendo anche **Laravel** per il backend.
-Ti preparo una versione pensata per il tuo progetto **full-stack (React + Laravel)**.
 
----
 
 ```markdown
 # 💰 Cassa
@@ -113,7 +110,4 @@ php artisan serve --env=production
 
 ```
 
----
 
-Vuoi che ti generi direttamente il **file `README.md` scaricabile**, così puoi metterlo subito nella cartella del progetto?
-```

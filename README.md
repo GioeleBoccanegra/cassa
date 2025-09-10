@@ -97,16 +97,8 @@ Backend:
 php artisan serve --env=production
 ```
 
-## 📌 TODO
 
-* [ ] Aggiungere autenticazione utenti (JWT o Laravel Sanctum)
-* [ ] Salvataggio storico scontrini nel database
-* [ ] Esportazione scontrini in PDF
-* [ ] Integrazione con metodi di pagamento
-
----
-
-👨‍💻 Progetto sviluppato da **\[Il tuo nome]**
+👨‍💻 Progetto sviluppato da **\[Gioele Boccanegra]**
 
 ```
 

@@ -93,7 +93,7 @@ npm run build
 Backend:
 
 ```bash
-php artisan serve --env=production
+php artisan serve 
 ```
 
 

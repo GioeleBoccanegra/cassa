@@ -99,6 +99,5 @@ php artisan serve --env=production
 
 👨‍💻 Progetto sviluppato da **\[Gioele Boccanegra]**
 
-```
 
 

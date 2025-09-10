@@ -1,6 +1,5 @@
 
 
-```markdown
 # 💰 Cassa
 
 Un’applicazione full-stack sviluppata con **React** (frontend) e **Laravel** (backend) per la gestione di una cassa digitale.  

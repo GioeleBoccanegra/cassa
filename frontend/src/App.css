@@ -4,27 +4,26 @@
   gap: 10px;
   padding: 20px;
   width: 100vw;
+  height: 100vh;
   box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f5f5f5;
   justify-content: center;
   align-items: flex-start;
-  /* usa flex-start per evitare che le due sezioni si centri verticalmente */
 }
 
 /* Zona sinistra */
 .zona-sinistra {
   width: 60vw;
-  /* cresce 2 volte rispetto alla destra, base 0 */
   min-width: 0;
-  /* importante per flex overflow */
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  height: 80vh;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  border: solid 3px rgba(0, 0, 0, 0.226);
 }
 
 
@@ -92,6 +91,11 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  justify-content: space-between;
+  height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: solid 3px rgba(0, 0, 0, 0.226);
 }
 
 .monitor-cassa {
@@ -102,7 +106,7 @@
   border-radius: 8px;
   padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 80vh
+  flex: 1;
 }
 
 .monitor-categorie-prodotti {
